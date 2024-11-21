@@ -1,6 +1,8 @@
 import React from "react";
 import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 
+import { colors } from "../Color";
+
 const CategoryItem = ({url, name, navigation}) => {
     return (
         <TouchableOpacity style={styles.button}
@@ -17,7 +19,7 @@ const styles = StyleSheet.create({
     button: {
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#EEE3CB',
+      backgroundColor: colors.background,
       borderRadius: 20,
       margin: 15,
       width: 120,
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
       fontSize: 20,
       fontWeight: 'bold',
       textAlign: 'center',
-      color: '#65647C',
+      color: colors.text,
     },
   });
 
