@@ -22,6 +22,7 @@ export default RecipeList = ({navigation, route}) => {
 
    const handleSubmit = () => {
     console.log(formData);
+    // after submission process, reset the form
     setFormData(defaultData);
   };
 
