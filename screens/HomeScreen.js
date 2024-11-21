@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Button, FlatList } fro
 
 import CategoryItem from '../components/CategoryItem';
 import PopupExample from '../components/PopUp';
+import { colors } from '../Color';
 
 const defaultCategories = [
     { id: '1', name: 'Soup', url: require('../assets/categoryIcons/soup.png') },
@@ -58,7 +59,7 @@ export default HomeScreen = ({ navigation }) => {
           fontSize: 20,
           fontWeight: 'bold',
           textAlign: 'center',
-          color: '#FEFBF6',
+          color: colors.text,
         },
         image: {
           width: 70,
@@ -67,7 +68,7 @@ export default HomeScreen = ({ navigation }) => {
         button: {
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#EEE3CB',
+          backgroundColor: colors.background,
           borderRadius: 50,
           margin: 20,
           width: 100,
