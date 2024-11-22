@@ -4,15 +4,6 @@ import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 import { colors } from "../Color";
 
 const CategoryItem = ({url, name, navigation}) => {
-
-  const getImageUrlById = ({url}) => {
-    const image = imageList.find(item => item.id === url);
-    console.log(image);
-    console.log(image.url);
-    return image ? image.url : null;
-  }
-
-  console.log(url);
   
     return (
         <TouchableOpacity style={styles.button}

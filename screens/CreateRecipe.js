@@ -1,9 +1,19 @@
 import React, {useState} from 'react'
-import {View, Text, Button, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import { Dropdown } from 'react-native-element-dropdown';
 
 import { colors } from '../Color';
+import DatabaseService from '../database_elements/DatabaseService';
+
+const databaseService = new DatabaseService();
+
+const categories = databaseService.getAllCategories();
+
+const data = categories.map(category => ({label: category.name, value: category.name}));
 
 export default RecipeList = ({navigation, route}) => {
+
+    console.log(databaseService.getAllRecipes());
 
     const defaultData = {
         category: '',
@@ -22,20 +32,36 @@ export default RecipeList = ({navigation, route}) => {
 
    const handleSubmit = () => {
     console.log(formData);
+    databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
     // after submission process, reset the form
     setFormData(defaultData);
+    setValue(null);
   };
+
+  const [value, setValue] = useState(null);
 
 
     return (
         <View style={styles.containerView}> 
             <View style={styles.category}> 
                 <Text style={styles.text}>Category</Text>
-                <TextInput style={styles.inputCategoryField}
-                placeholder="Category"
-                onChangeText={(text) => setFormData({...formData, category: text})}
-                value={formData.category}
-                />
+                    <Dropdown
+                        style={styles.dropdown}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        itemTextStyle={styles.textStyle}
+                        itemContainerStyle={styles.itemContainerStyle}
+                        containerStyle={styles.dropdownContainer}
+                        data={data}
+                        labelField="label"
+                        valueField="value"
+                        placeholder="Select Category..."
+                        value={value}
+                        onChange={item => {
+                        setValue(item.value);
+                        setFormData({...formData, category: item.label})
+                        }}
+                    />
             </View>
             <View style={styles.name}>
                 <Text style={styles.text}>Name</Text>
@@ -195,5 +221,43 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         width: '50%',
     },
+    dropdown: {
+        width: '60%',
+        height: '100%',
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        backgroundColor: 'white',
+      },
+      placeholderStyle: {
+        fontSize: 18,
+        color: colors.text
+      },
+        selectedTextStyle: {
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: colors.text,
+        },
+        textStyle: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: colors.text
+        },
+        itemContainerStyle: {
+            borderRadius: 10,
+            margin: 10,
+            backgroundColor: colors.background,
+        },
+        dropdownContainer: {
+            height: '100%',
+            borderColor: colors.text,
+            borderStyle: 'solid',
+            borderWidth: 2,
+            paddingHorizontal: 10,
+            borderRadius: 10,
+            backgroundColor: 'white',
+        },
+      
     
 });
