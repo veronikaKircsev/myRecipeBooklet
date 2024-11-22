@@ -1,18 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Button, FlatList } from 'react-native';
 
 import CategoryItem from '../components/CategoryItem';
 import PopupExample from '../components/PopUp';
 import { colors } from '../Color';
 
-const defaultCategories = [
-    { id: '1', name: 'Soup', url: require('../assets/categoryIcons/soup.png') },
-    { id: '2', name: 'Main Dish', url: require('../assets/categoryIcons/mainCourse.png') },
-    { id: '3', name: 'Dessert', url: require('../assets/categoryIcons/mignons.png') },
-    { id: '4', name: 'Try Later', url: require('../assets/categoryIcons/notes.png') },
-  ];
+import DatabaseService from '../database_elements/DatabaseService';
+
+const databaseService = new DatabaseService();
+databaseService.initializeDefaultCategories();
+let key = 0;
+
+
 
 export default HomeScreen = ({ navigation }) => {
+
+  
+  const categories = databaseService.getAllCategories();
+  console.log(categories);
 
     const [isPopupVisible, setPopupVisible] = useState(false);
 
@@ -23,8 +28,8 @@ export default HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.containerView}> 
-            {defaultCategories.map((defaultCategory) =>
-                <CategoryItem key={defaultCategory.id} url={defaultCategory.url} name={defaultCategory.name} navigation={navigation}/>
+            {categories.map((defaultCategory) =>
+                <CategoryItem key={key++} url={defaultCategory.url} name={defaultCategory.name} navigation={navigation}/>
                 )}
             </View>
             <View style={styles.button}>

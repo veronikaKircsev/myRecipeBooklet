@@ -5,6 +5,7 @@ export class Category {
         this.url = url;
     }    
 
+    /*
     setName(value) {
         this.name = value;
     }
@@ -24,4 +25,5 @@ export class Category {
     toString() {
         return "name = " + this.name + ", URL = "+ this.url;
     }
+    */
 }
