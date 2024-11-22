@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { colors } from '../Color';
 
 const PopupExample = ({isVisible, toggle, navigation}) => {
 
@@ -40,15 +41,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f2f2f2',
+    backgroundColor: colors.background,
   },
   openButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: colors.background,
     padding: 10,
     borderRadius: 5,
   },
   textStyle: {
-    color: '#65647C',
+    color: colors.text,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   closeButton: {
-    backgroundColor: '#EEE3CB',
+    backgroundColor: colors.background,
     padding: 10,
     borderRadius: 5,
   },

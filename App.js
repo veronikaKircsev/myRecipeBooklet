@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import RecipeList from './screens/RecipeList';
 import CreateRecipe from './screens/CreateRecipe';
+import { colors } from './Color';
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -14,9 +15,9 @@ export default function App() {
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Home" screenOptions={{
           headerStyle: {
-            backgroundColor: '#EEE3CB',
+            backgroundColor: colors.background,
           },
-          headerTintColor: '#65647C',
+          headerTintColor: colors.text,
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -36,7 +37,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   }
