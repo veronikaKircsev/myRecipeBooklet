@@ -7,7 +7,7 @@ const CategoryItem = ({url, name, navigation}) => {
   
     return (
         <TouchableOpacity style={styles.button}
-        onPress={() => {navigation.navigate('Recipies')}}> 
+        onPress={() => {navigation.navigate('Recipies', {category: name})}}> 
                   <View> 
                   <Image source={imageList.find(item => item.id === url).url} style={styles.image}/>
                   <Text style={styles.text}>{name}</Text>

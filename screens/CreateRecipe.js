@@ -11,7 +11,7 @@ const categories = databaseService.getAllCategories();
 
 const data = categories.map(category => ({label: category.name, value: category.name}));
 
-export default RecipeList = ({navigation, route}) => {
+export default RecipeList = ({navigation}) => {
 
     console.log(databaseService.getAllRecipes());
 
@@ -25,10 +25,6 @@ export default RecipeList = ({navigation, route}) => {
 
     const [formData, setFormData] = useState(defaultData);
 
-    
-   const goBack = () => {
-        navigation.navigate("Home");
-   }
 
    const handleSubmit = () => {
     console.log(formData);
@@ -73,16 +69,14 @@ export default RecipeList = ({navigation, route}) => {
             </View>
             <View style={styles.ingredients}>
                 <Text style={styles.text}>Ingredients</Text>
-                <TextInput style={styles.ingredientsField} multiline={true} textAlignVertical="top"
-                numberOfLines={10} placeholder="Ingredients"
+                <TextInput style={styles.ingredientsField} multiline={true} textAlignVertical="top" placeholder="Ingredients"
                     onChangeText={(text) => setFormData({...formData, ingredients: text})}
                     value={formData.ingredients}
                 />
             </View>
             <View style={styles.instructions}>
                 <Text style={styles.text}>Instructions</Text>
-                <TextInput style={styles.instructionsField} multiline={true} textAlignVertical="top"
-                numberOfLines={10} placeholder="Instructions"
+                <TextInput style={styles.instructionsField} multiline={true} textAlignVertical="top" placeholder="Instructions"
                     onChangeText={(text) => setFormData({...formData, instructions: text})}
                     value={formData.instructions}
                 />

@@ -9,6 +9,7 @@ import DatabaseService from '../database_elements/DatabaseService';
 
 const databaseService = new DatabaseService();
 databaseService.initializeDefaultCategories();
+databaseService.generateTestRecipes();
 let key = 0;
 
 

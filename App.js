@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { StyleSheet, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, SafeAreaView , Button, TouchableOpacity, Image} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -8,9 +8,13 @@ import HomeScreen from './screens/HomeScreen';
 import RecipeList from './screens/RecipeList';
 import CreateRecipe from './screens/CreateRecipe';
 import { colors } from './Color';
+import RecipeScreen from './screens/RecipeScreen';
+
 
 const Stack = createStackNavigator();
+
 export default function App() {
+
   return (
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Home" screenOptions={{
@@ -29,6 +33,9 @@ export default function App() {
           }} />
       <Stack.Screen name="Recipies" component={RecipeList} />
       <Stack.Screen name="Edit Recipe" component={CreateRecipe} />
+      <Stack.Screen name="Recipe" component={RecipeScreen} options={({ route }) => ({
+          title: route.params.name
+        })} />
     </Stack.Navigator>
   </NavigationContainer>
   );
