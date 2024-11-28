@@ -11,9 +11,7 @@ const categories = databaseService.getAllCategories();
 
 const data = categories.map(category => ({label: category.name, value: category.name}));
 
-export default RecipeList = ({navigation}) => {
-
-    console.log(databaseService.getAllRecipes());
+export default EditRecipe = ({navigation, route}) => {
 
     const defaultData = {
         category: '',
@@ -23,18 +21,31 @@ export default RecipeList = ({navigation}) => {
         notice: ''
     }
 
-    const [formData, setFormData] = useState(defaultData);
+    const {category, name, ingredients, instructions, notice} = route.params!==undefined? route.params: defaultData;
+    const routeData = {
+            category: category,
+            name: name,
+            ingredients: ingredients,
+            instructions: instructions,
+            notice: notice
+    };
+    
 
+    const [formData, setFormData] = useState(routeData!==undefined? routeData: defaultData);
 
    const handleSubmit = () => {
     console.log(formData);
+    if (routeData!==undefined) {
+    databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
+    } else {
     databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+    }
     // after submission process, reset the form
     setFormData(defaultData);
     setValue(null);
   };
 
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(routeData!==undefined? routeData.category: null);
 
 
     return (

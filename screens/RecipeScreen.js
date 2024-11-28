@@ -9,10 +9,11 @@ const databaseService = new DatabaseService();
 
 export default RecipeScreen = ({navigation, route}) => {
 
-    const {name, ingredients, instructions, notice, like, handleLike} = route.params;
+    const {category, name, ingredients, instructions, notice, like, handleLike} = route.params;
 
     const [recipeLike, setLike] = useState(like);
 
+    //const [editedCategory, setEditedCategory] = useState(false);
 
     React.useEffect(() => {
       navigation.setOptions({
@@ -27,6 +28,7 @@ export default RecipeScreen = ({navigation, route}) => {
         ),
       });
     }, [navigation, recipeLike]);
+
   
    
     return (
@@ -43,6 +45,15 @@ export default RecipeScreen = ({navigation, route}) => {
             <Text style={styles.text}>Notice:</Text>
             <Text style={styles.textContainer}>{notice}</Text>
             </View>
+            <TouchableOpacity style={styles.editContainer} onPress={() => {navigation.navigate('Edit Recipe',
+                {category: category, 
+                name: name, 
+                ingredients: ingredients, 
+                instructions: instructions, 
+                notice: notice}
+            )}}>
+                <Image style={styles.edit} source={require('../assets/appIcons/modify.png')}/>
+            </TouchableOpacity>
         </ScrollView>
     );
 
@@ -84,6 +95,24 @@ const styles = StyleSheet.create({
         right: 10,
         width: 30,
         height: 30,
-    }
+    },
+    edit:{
+        width: 40,
+        height: 40,
+    },
+    editContainer:{
+        width: 60,
+        height: 60,
+        backgroundColor: colors.background,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-end',
+        borderBlockColor: colors.text,
+        borderWidth: 2,
+        borderStyle: 'solid',
+        margin:10,
+    },
+
 
 });

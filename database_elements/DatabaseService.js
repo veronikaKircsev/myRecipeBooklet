@@ -48,6 +48,19 @@ class DatabaseService {
         });
     }
 
+    updateRecipe(nameOld, nameNew, categoryNew, ingredientsNew, instructionsNew, noticeNew) {
+        const data = this.store.getRow(RECIPE, nameOld);
+        this.store.setRow(RECIPE, nameOld, {
+            name: nameNew,
+            category: categoryNew,
+            ingredients: ingredientsNew,
+            instructions: instructionsNew,
+            notice: noticeNew,
+            isLiked: data.isLiked
+        });
+
+    }
+
     getRecipe(value) {
         const data = this.store.getRow(RECIPE, value);
         const recipe = new Recipe(data.name, data.category, data.ingredients, data.instructions, data.notice, data.isLiked);

@@ -21,6 +21,7 @@ const RecipeListItem = ({recipe, navigation}) => {
      return (
         <TouchableOpacity style={styles.button}
         onPress={() => {navigation.navigate('Recipe',{
+            category: recipe.category,
             name: recipe.name,
             ingredients:recipe.ingredients,
             instructions: recipe.instructions,

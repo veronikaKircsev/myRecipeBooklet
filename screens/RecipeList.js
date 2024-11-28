@@ -18,9 +18,6 @@ export default RecipeList = ({navigation, route}) => {
         
       }, [isLiked]);
 
-    console.log(recipes);
-
-
     return (
         <ScrollView style={styles.containerView}> 
             {recipes.map((recipe) =>
