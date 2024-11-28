@@ -13,7 +13,15 @@ export default RecipeScreen = ({navigation, route}) => {
 
     const [recipeLike, setLike] = useState(like);
 
-    //const [editedCategory, setEditedCategory] = useState(false);
+    const [nameRecipe, setNameRecipe] = useState(name);
+
+    navigation.setOptions({
+        title: nameRecipe
+      });
+
+      function setNewNameRecipe(newName) {
+        setNameRecipe(newName);
+      }
 
     React.useEffect(() => {
       navigation.setOptions({
@@ -50,7 +58,8 @@ export default RecipeScreen = ({navigation, route}) => {
                 name: name, 
                 ingredients: ingredients, 
                 instructions: instructions, 
-                notice: notice}
+                notice: notice,
+                newName: setNewNameRecipe}
             )}}>
                 <Image style={styles.edit} source={require('../assets/appIcons/modify.png')}/>
             </TouchableOpacity>

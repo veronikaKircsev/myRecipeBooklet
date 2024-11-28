@@ -1,13 +1,23 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 
 import { colors } from "../Color";
+import {CategoryContext} from "../context/CategoryContextProvider";
+
 
 const CategoryItem = ({url, name, navigation}) => {
+  const { categoryContext, setCategoryContext } = useContext(CategoryContext);
   
+  const handlePress = () => {
+    setCategoryContext(name);
+    navigation.navigate('Recipies', {category: name})
+    console.log(categoryContext);
+    console.log(name);
+  }
+
     return (
         <TouchableOpacity style={styles.button}
-        onPress={() => {navigation.navigate('Recipies', {category: name})}}> 
+        onPress={handlePress}> 
                   <View> 
                   <Image source={imageList.find(item => item.id === url).url} style={styles.image}/>
                   <Text style={styles.text}>{name}</Text>

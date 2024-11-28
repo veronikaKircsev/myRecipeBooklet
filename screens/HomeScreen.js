@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Button, FlatList } from 'react-native';
 
 import CategoryItem from '../components/CategoryItem';
@@ -25,7 +25,7 @@ export default HomeScreen = ({ navigation }) => {
     const togglePopup = () => {
         setPopupVisible(!isPopupVisible);
     };
-
+    
     return (
         <View style={styles.container}>
             <View style={styles.containerView}> 
@@ -34,10 +34,10 @@ export default HomeScreen = ({ navigation }) => {
                 )}
             </View>
             <View style={styles.button}>
-            <TouchableOpacity onPress={() => togglePopup()}>
-            <Image source={require('../assets/appIcons/plus.png')} style={styles.image} />
-            <PopupExample isVisible={isPopupVisible} toggle={togglePopup} navigation={navigation} />
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => togglePopup()}>
+                <Image source={require('../assets/appIcons/plus.png')} style={styles.image} />
+                <PopupExample isVisible={isPopupVisible} toggle={togglePopup} navigation={navigation} />
+              </TouchableOpacity>
             </View>
         </View>
     );
