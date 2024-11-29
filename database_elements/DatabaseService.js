@@ -105,9 +105,74 @@ class DatabaseService {
         this.createCategory('Main Dish', '2')
         this.createCategory('Dessert', '3')
         this.createCategory('Try Later', '4')
+        this.createCategory('aaa', '5')
+        this.createCategory('bbb', '6')
+        this.createCategory('ccc', '7')
+
+    }
+
+    initRecipies() {
+        this.createRecipe('Fish', 'Test', 'some Ingredients', 'some instructions', 'some notice');
+        this.createRecipe('Meat', 'Test2', 'some Ingredients2', 'some instructions2', 'some notice2');
+        this.createRecipe('aaa', 'aaa', 'aaa', 'aaa', 'aaa');
+        this.createRecipe('bbb', 'bbb', 'bbb', 'bbb', 'bbb');
+        this.createRecipe('ddd', 'ddd', 'ddd', 'ddd', 'ddd');
+        this.createRecipe('ccc', 'ccc', 'ccc', 'ccc', 'ccc');
+    }
+
+    updateRecipe(nameUpdate, { name, category, ingredients, instructions, notice }) {
+        console.log("updateRecipe: " + name + " " + category + " " + ingredients + " " + instructions + " " + notice);
+        const tableData = this.store.getTable(RECIPE);
+        const rowId = Object.keys(tableData).find(key => tableData[key].name === nameUpdate);
+
+        console.log("DatabaseService.js: " + rowId);
+        
+        // const rowData = this.store.getRow(RECIPE, nameUpdate);
+    
+        const updatedData = {
+            name: name !== undefined ? name : tableData.name,
+            category: category !== undefined ? category : tableData.category,
+            ingredients: ingredients !== undefined ? ingredients : tableData.ingredients,
+            instructions: instructions !== undefined ? instructions : tableData.instructions,
+            notice: notice !== undefined ? notice : tableData.notice,
+        };
+    
+        if(rowId) {
+            this.store.setRow(RECIPE, rowId, updatedData);
+        } else {
+            console.warn(`Recipe with ID ${nameUpdate} has been updated.`);
+        }
     }
     
+    
 
+    deleteRecipe(name) {
+        const tableData = this.store.getTable(RECIPE);
+        const rowId = Object.keys(tableData).find(key => tableData[key].name === name);
+
+        console.log("rowId: " + rowId);
+        console.log(this.getRecipe(rowId));
+
+        if (rowId) {
+            this.store.delRow(RECIPE, rowId);
+        } else {
+            console.warn(`Recipe with name "${name}" not found.`);
+        }
+    }
+
+    deleteCategory(name) {
+        const tableData = this.store.getTable(CATEGORY);
+        const rowId = Object.keys(tableData).find(key => tableData[key].name === name);
+
+        console.log("rowId: " + rowId);
+        console.log(this.getCategory(rowId));
+
+        if(rowId) {
+            this.store.delRow(CATEGORY, rowId);
+        } else {
+            console.warn(`Category with name "${name}" not found.`);
+        }
+    }
 }
 
 export default DatabaseService;
