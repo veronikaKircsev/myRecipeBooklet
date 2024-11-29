@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image  } from 'react-native';
-
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
 
@@ -19,11 +18,11 @@ export default RecipeScreen = ({navigation, route}) => {
         title: nameRecipe
       });
 
-      function setNewNameRecipe(newName) {
+    function setNewNameRecipe(newName) {
         setNameRecipe(newName);
-      }
+    }
 
-    React.useEffect(() => {
+    useEffect(() => {
       navigation.setOptions({
         headerRight: () => (
             <TouchableOpacity style={styles.likeButton} onPress={()=>{databaseService.updateLike(name),
@@ -121,7 +120,5 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderStyle: 'solid',
         margin:10,
-    },
-
-
+    }
 });

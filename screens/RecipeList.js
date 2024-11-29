@@ -3,17 +3,15 @@ import {StyleSheet, ScrollView, View, TouchableOpacity, Image} from 'react-nativ
 import DatabaseService from '../database_elements/DatabaseService';
 import RecipeListItem from '../components/RecipeListItem';
 import {CategoryContext} from "../context/CategoryContextProvider";
-
 import { colors } from '../Color';
 
 const databaseService = new DatabaseService();
 let key = 0;
 
-export default RecipeList = ({navigation, route}) => {
+export default RecipeList = ({navigation}) => {
 
     const { categoryContext} = useContext(CategoryContext);
     
-    const {category, isLiked} = route.params;
     let recipes = databaseService.getAllRecipes();
 
     navigation.setOptions({
@@ -27,12 +25,12 @@ export default RecipeList = ({navigation, route}) => {
     }
     
     useEffect(() => {
-        if (route.params?.isLiked || addNewRecipe) {
+        if (addNewRecipe) {
             recipes = databaseService.getAllRecipes();
           }
-      }, [isLiked, categoryContext]);
+      }, [categoryContext]);
 
-      const handlePress = () => {
+    const handlePress = () => {
         navigation.navigate('Edit Recipe',{category: categoryContext, previous: true, newAdded: setNewRecipe});
     }
 

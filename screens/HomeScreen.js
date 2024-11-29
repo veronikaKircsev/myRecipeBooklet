@@ -1,18 +1,14 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button, FlatList } from 'react-native';
-
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import CategoryItem from '../components/CategoryItem';
 import PopupExample from '../components/PopUp';
 import { colors } from '../Color';
-
 import DatabaseService from '../database_elements/DatabaseService';
 
 const databaseService = new DatabaseService();
 databaseService.initializeDefaultCategories();
 databaseService.generateTestRecipes();
 let key = 0;
-
-
 
 export default HomeScreen = ({ navigation }) => {
 
@@ -29,8 +25,8 @@ export default HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.containerView}> 
-            {categories.map((defaultCategory) =>
-                <CategoryItem key={key++} url={defaultCategory.url} name={defaultCategory.name} navigation={navigation}/>
+            {categories.map((category) =>
+                <CategoryItem key={key++} url={category.url} name={category.name} navigation={navigation}/>
                 )}
             </View>
             <View style={styles.button}>

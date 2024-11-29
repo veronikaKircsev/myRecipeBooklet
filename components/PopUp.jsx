@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -21,7 +21,7 @@ const PopupExample = ({isVisible, toggle, navigation}) => {
       animationType="slide"
       transparent={true}
       visible={isVisible}
-      onRequestClose={toggle} // For Android back button
+      onRequestClose={toggle}
     >
       <TouchableWithoutFeedback onPress={toggle}>
         <View style={styles.modalOverlay}>

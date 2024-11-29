@@ -1,6 +1,5 @@
 
-import React, {useContext} from 'react'
-import { StyleSheet} from 'react-native';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -9,7 +8,7 @@ import RecipeList from './screens/RecipeList';
 import CreateRecipe from './screens/CreateRecipe';
 import { colors } from './Color';
 import RecipeScreen from './screens/RecipeScreen';
-import {CategoryContextProvider, CategoryContext} from './context/CategoryContextProvider';
+import {CategoryContextProvider} from './context/CategoryContextProvider';
 
 
 const Stack = createStackNavigator();
@@ -30,9 +29,7 @@ export default function App() {
             fontSize: 30,
           },
         }}>
-      <Stack.Screen name="Home" component={HomeScreen} options={{
-            headerLeft: null, title: 'My Recipe Booklet'
-          }} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{title: 'My Recipe Booklet'}} />
       <Stack.Screen name="Recipies" component={RecipeList} />
       <Stack.Screen name="Edit Recipe" component={CreateRecipe} />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
@@ -41,12 +38,3 @@ export default function App() {
   </CategoryContextProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-});

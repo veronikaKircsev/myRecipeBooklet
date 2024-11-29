@@ -2,7 +2,6 @@ import React, {useState, useContext} from 'react'
 import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import {CategoryContext} from "../context/CategoryContextProvider";
-
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
 
@@ -48,11 +47,11 @@ export default EditRecipe = ({navigation, route}) => {
         newName(formData.name);
         databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
         setCategoryContext(formData.category);
+        navigation.goBack();
         }
     } else {
     databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
     }
-    // after submission process, reset the form
     setFormData(defaultData);
     setValue(null);
   };

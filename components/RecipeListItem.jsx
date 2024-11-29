@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
-
 import { colors } from "../Color";
 import DatabaseService from "../database_elements/DatabaseService";
 
@@ -9,13 +8,9 @@ const RecipeListItem = ({recipe, navigation}) => {
 
     const [like, setLike] = useState(recipe.isLiked==='true'? true:false);
 
-     const handlePress = () => {
-        setLike(!like);
-        database.updateLike(recipe.name);
-    }
-
     function handleLike() {
         setLike(!like);
+        database.updateLike(recipe.name);
     };
       
      return (
@@ -30,7 +25,7 @@ const RecipeListItem = ({recipe, navigation}) => {
             handleLike: handleLike})}}>
                     <View> 
                     <Text style={styles.text}>{recipe.name}</Text>
-                    <TouchableOpacity style={styles.likeButton} onPress={handlePress}>
+                    <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
                         {like?
                     (<Image style={styles.image} source={require('../assets/appIcons/like.png')}/>):(
                     <Image style={styles.image} source={require('../assets/appIcons/not-like.png')}/>)}
