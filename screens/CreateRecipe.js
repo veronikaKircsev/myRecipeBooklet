@@ -24,7 +24,6 @@ export default EditRecipe = ({navigation, route}) => {
     }
 
     const {category, name, ingredients, instructions, notice, newName, previous, newAdded} = route.params!==undefined? route.params: defaultData;
-    console.log(route.params);
     const routeData = {
             category: category,
             name: name,
