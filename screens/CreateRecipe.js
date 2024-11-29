@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
+import {CategoryContext} from "../context/CategoryContextProvider";
 
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
@@ -13,6 +14,8 @@ const data = categories.map(category => ({label: category.name, value: category.
 
 export default EditRecipe = ({navigation, route}) => {
 
+    const { categoryContext, setCategoryContext } = useContext(CategoryContext);
+
     const defaultData = {
         category: '',
         name: '',
@@ -21,7 +24,8 @@ export default EditRecipe = ({navigation, route}) => {
         notice: ''
     }
 
-    const {category, name, ingredients, instructions, notice} = route.params!==undefined? route.params: defaultData;
+    const {category, name, ingredients, instructions, notice, newName, previous, newAdded} = route.params!==undefined? route.params: defaultData;
+    console.log(route.params);
     const routeData = {
             category: category,
             name: name,
@@ -34,9 +38,17 @@ export default EditRecipe = ({navigation, route}) => {
     const [formData, setFormData] = useState(routeData!==undefined? routeData: defaultData);
 
    const handleSubmit = () => {
+    console.log(routeData);
     console.log(formData);
     if (routeData!==undefined) {
-    databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
+        if (previous) {
+            databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+            newAdded();
+        } else {
+        newName(formData.name);
+        databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
+        setCategoryContext(formData.category);
+        }
     } else {
     databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
     }

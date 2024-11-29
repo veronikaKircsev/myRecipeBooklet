@@ -5,6 +5,7 @@ import {
   Modal,
   TouchableOpacity,
   StyleSheet,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { colors } from '../Color';
 
@@ -22,16 +23,20 @@ const PopupExample = ({isVisible, toggle, navigation}) => {
       visible={isVisible}
       onRequestClose={toggle} // For Android back button
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={handlePress}
-          >
-            <Text style={styles.textStyle}>Create Recipe</Text>
-          </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={toggle}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback>
+            <View style={styles.modalContent}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={handlePress}
+              >
+                <Text style={styles.textStyle}>Create Recipe</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -52,6 +57,7 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontSize: 20,
   },
   modalOverlay: {
     flex: 1,
@@ -60,19 +66,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: 300,
+    width: '90%',
+    height: 100,
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 10,
     alignItems: 'center',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-    fontSize: 16,
-  },
   closeButton: {
     backgroundColor: colors.background,
+    width: '80%',
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     padding: 10,
     borderRadius: 5,
   },

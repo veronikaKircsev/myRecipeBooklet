@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import * as React from 'react';
-import { StyleSheet, Text, SafeAreaView , Button, TouchableOpacity, Image} from 'react-native';
+
+import React, {useContext} from 'react'
+import { StyleSheet} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -9,6 +9,7 @@ import RecipeList from './screens/RecipeList';
 import CreateRecipe from './screens/CreateRecipe';
 import { colors } from './Color';
 import RecipeScreen from './screens/RecipeScreen';
+import {CategoryContextProvider, CategoryContext} from './context/CategoryContextProvider';
 
 
 const Stack = createStackNavigator();
@@ -16,6 +17,7 @@ const Stack = createStackNavigator();
 export default function App() {
 
   return (
+    <CategoryContextProvider>
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Home" screenOptions={{
           headerStyle: {
@@ -33,11 +35,10 @@ export default function App() {
           }} />
       <Stack.Screen name="Recipies" component={RecipeList} />
       <Stack.Screen name="Edit Recipe" component={CreateRecipe} />
-      <Stack.Screen name="Recipe" component={RecipeScreen} options={({ route }) => ({
-          title: route.params.name
-        })} />
+      <Stack.Screen name="Recipe" component={RecipeScreen} />
     </Stack.Navigator>
   </NavigationContainer>
+  </CategoryContextProvider>
   );
 }
 
