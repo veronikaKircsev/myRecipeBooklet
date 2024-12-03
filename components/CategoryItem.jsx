@@ -4,7 +4,7 @@ import { colors } from "../Color";
 import {CategoryContext} from "../context/CategoryContextProvider";
 
 
-const CategoryItem = ({url, name, navigation}) => {
+export const CategoryItem = ({url, name, navigation}) => {
 
   const { categoryContext, setCategoryContext } = useContext(CategoryContext);
   
@@ -17,7 +17,7 @@ const CategoryItem = ({url, name, navigation}) => {
         <TouchableOpacity style={styles.button}
         onPress={handlePress}> 
                   <View> 
-                  <Image source={imageList.find(item => item.id === url).url} style={styles.image}/>
+                  <Image source={ImageList.find(item => item.id === url).url} style={styles.image}/>
                   <Text style={styles.text}>{name}</Text>
                   </View> 
         </TouchableOpacity> 
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     },
   });
 
-  const imageList = [
+  export const ImageList = [
     { id: '1', 'url': require('../assets/categoryIcons/soup.png') },
     { id: '2', 'url': require('../assets/categoryIcons/mainCourse.png') },
     { id: '3', 'url': require('../assets/categoryIcons/mignons.png') },
@@ -94,5 +94,3 @@ const styles = StyleSheet.create({
     { id: '46', 'url': require('../assets/categoryIcons/43.png') },
   
 ];
-
-  export default CategoryItem;

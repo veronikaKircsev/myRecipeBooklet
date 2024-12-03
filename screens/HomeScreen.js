@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-import CategoryItem from '../components/CategoryItem';
+import React, {useState, useEffect, useContext} from 'react';
+import { StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import {CategoryItem} from '../components/CategoryItem';
 import PopupExample from '../components/PopUp';
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
+import {DBChangedContext} from '../context/DBChangedContextProvider';
+
 
 const databaseService = new DatabaseService();
 databaseService.initializeDefaultCategories();
@@ -12,23 +14,40 @@ let key = 0;
 
 export default HomeScreen = ({ navigation }) => {
 
-  
-  const categories = databaseService.getAllCategories();
-  console.log(categories);
+  const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
 
     const [isPopupVisible, setPopupVisible] = useState(false);
+    const [categories, setCategories] = useState(databaseService.getAllCategories());
 
     const togglePopup = () => {
         setPopupVisible(!isPopupVisible);
     };
+
+    useEffect(() => {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity onPress={()=>{navigation.navigate('Recipies', {homeScreen:true})}}>
+            <Image source={require('../assets/appIcons/search.png')} style={styles.searchIcon} />
+          </TouchableOpacity>
+        ),
+      });
+    }, []);
+
+    useEffect(() => {
+
+      const updatedCategories = databaseService.getAllCategories();
+    setCategories(updatedCategories);
+    }, [dBChangedContext]);
     
     return (
         <View style={styles.container}>
+          <ScrollView>
             <View style={styles.containerView}> 
             {categories.map((category) =>
                 <CategoryItem key={key++} url={category.url} name={category.name} navigation={navigation}/>
                 )}
             </View>
+            </ScrollView>
             <View style={styles.button}>
               <TouchableOpacity onPress={() => togglePopup()}>
                 <Image source={require('../assets/appIcons/plus.png')} style={styles.image} />
@@ -64,8 +83,8 @@ export default HomeScreen = ({ navigation }) => {
           color: colors.text,
         },
         image: {
-          width: 70,
-          height: 70,
+          width: 50,
+          height: 50,
         },
         button: {
           alignItems: 'center',
@@ -73,7 +92,13 @@ export default HomeScreen = ({ navigation }) => {
           backgroundColor: colors.background,
           borderRadius: 50,
           margin: 20,
-          width: 100,
-          height: 100,
+          width: 70,
+          height: 70,
         },
+        searchIcon:
+      {
+        width: 40,
+        height: 40,	
+        margin: 20,
+      }
       });

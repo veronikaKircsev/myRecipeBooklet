@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,21 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { colors } from '../Color';
+import {CategoryContext} from "../context/CategoryContextProvider";
 
 const PopupExample = ({isVisible, toggle, navigation}) => {
 
-    const handlePress = () => {
-        navigation.navigate('Edit Recipe');
+  const { categoryContext, setCategoryContext } = useContext(CategoryContext);
+
+    const handlePressRecipe = () => {
+      setCategoryContext('');
+        navigation.navigate('Edit Recipe', {fromHome: true});
         toggle();
       };
+    const handlePressCategory = () => {
+        navigation.navigate('Create Category');
+        toggle();
+    };
 
   return (
     <Modal
@@ -29,9 +37,15 @@ const PopupExample = ({isVisible, toggle, navigation}) => {
             <View style={styles.modalContent}>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={handlePress}
+                onPress={handlePressRecipe}
               >
                 <Text style={styles.textStyle}>Create Recipe</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={handlePressCategory}
+              >
+                <Text style={styles.textStyle}>Create Category</Text>
               </TouchableOpacity>
             </View>
           </TouchableWithoutFeedback>
@@ -66,8 +80,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
     width: '90%',
-    height: 100,
+    height: 150,
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -75,8 +91,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     backgroundColor: colors.background,
-    width: '80%',
-    height: 60,
+    width: '40%',
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',

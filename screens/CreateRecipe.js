@@ -1,19 +1,27 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import {CategoryContext} from "../context/CategoryContextProvider";
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
+import {DBChangedContext} from '../context/DBChangedContextProvider';
+import RecipeList from './RecipeList';
 
 const databaseService = new DatabaseService();
 
-const categories = databaseService.getAllCategories();
 
-const data = categories.map(category => ({label: category.name, value: category.name}));
 
 export default EditRecipe = ({navigation, route}) => {
-
+    
     const { categoryContext, setCategoryContext } = useContext(CategoryContext);
+    const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
+    
+    const categories = databaseService.getAllCategories();
+
+    const [data, setData] = useState([
+        ...categories.map(category => ({label: category.name, value: category.name})),
+        {label: "+ Category", value: "add_category"}
+      ]);
 
     const defaultData = {
         category: '',
@@ -23,7 +31,7 @@ export default EditRecipe = ({navigation, route}) => {
         notice: ''
     }
 
-    const {category, name, ingredients, instructions, notice, newName, previous, newAdded} = route.params!==undefined? route.params: defaultData;
+    const {category, name, ingredients, instructions, notice, newName, recipeList, newAdded, fromHome} = route.params!==undefined? route.params: defaultData;
     const routeData = {
             category: category,
             name: name,
@@ -31,18 +39,27 @@ export default EditRecipe = ({navigation, route}) => {
             instructions: instructions,
             notice: notice
     };
+
     
 
     const [formData, setFormData] = useState(routeData!==undefined? routeData: defaultData);
+
+    useEffect(() => {
+        if (formData.category === "+ Category") {
+            navigation.navigate("Create Category", { createPage: true });
+        }
+    }, [formData.category]);
 
    const handleSubmit = () => {
     console.log(routeData);
     console.log(formData);
     if (routeData!==undefined) {
-        if (previous) {
+        if (recipeList) {
             databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
             newAdded();
-        } else {
+        }else if (fromHome){
+            databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+        } else{
         newName(formData.name);
         databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
         setCategoryContext(formData.category);
@@ -54,10 +71,20 @@ export default EditRecipe = ({navigation, route}) => {
     setFormData(defaultData);
     setValue(null);
   };
+    
+    const [value, setValue] = useState(routeData!==undefined? routeData.category: categoryContext);
 
-  const [value, setValue] = useState(routeData!==undefined? routeData.category: null);
+  useEffect(() => {
+    const addedCategory = databaseService.getAllCategories();
+    setData([
+        ...addedCategory.map(category => ({label: category.name, value: category.name})),
+        {label: "+ Category", value: "add_category"}
+        ]);
+        setFormData({...formData, category: categoryContext});
+        setValue(categoryContext);
+    }, [dBChangedContext]);
 
-
+    console.log(formData.category);
     return (
         <View style={styles.containerView}> 
             <View style={styles.category}> 
