@@ -1,12 +1,16 @@
 import { CameraView, CameraType, useCameraPermissions, Camera } from 'expo-camera';
 import { useState, useRef, useEffect } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View, Image, Modal } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 
+let imageUriExport = null;
 
 export default function CameraScreen() {
     const {facing, setFacing} = useState<CameraType>('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState();
+    const [confirmPhoto, setConfirmPhoto] = useState(false);
+    const [loadedPhotoUri, setLoadedPhotoUri] = useState(null);
     // let cameraRef = useRef();
     let cameraRef = useRef(null);
 
@@ -28,12 +32,14 @@ export default function CameraScreen() {
                 if (photoData.uri) {
                     console.log("Foto erfolgreich aufgenommen! URI:", photoData.uri);
                     setImageUri(photoData.uri); // Pfad des Fotos speichern
+                    
+                    setConfirmPhoto(true);
+
                   } else {
                     console.error("Fotoaufnahme fehlgeschlagen!");
                   }
                 setImageUri(photoData.uri);
                 console.log("photoData.uri: " + photoData.uri);
-
             });
         }
     };
@@ -56,6 +62,101 @@ export default function CameraScreen() {
         setFacing(current => (current === 'back' ? 'front' : 'back'));
     }
 
+    async function writeFileAsync() {
+      const fileUri = FileSystem.documentDirectory + 'myFile.txt';
+      const content = 'Hello, World!';
+  
+      try {
+          await FileSystem.writeAsStringAsync(fileUri, content);
+          console.log('File written successfully');
+      } catch (error) {
+          console.error('Error while writing file:', error);
+      }
+    }
+
+    async function savePhotoAsync(imageUri, fileName) {
+      const fileUri = FileSystem.documentDirectory +  fileName + '.jpg';
+  
+      try {
+          await FileSystem.copyAsync({
+            from: imageUri,
+            to: fileUri,
+          });
+          console.log('Photo saved in the File System successfully');
+      } catch (error) {
+          console.error('Error while saving photo:', error);
+      }
+    };
+
+    async function getPhotoAsync(fileName) {
+      const fileUri = FileSystem.documentDirectory + fileName + '.jpg';
+
+      try {
+        const fileExists = await FileSystem.getInfoAsync(fileUri);
+        if(fileExists.exists) {
+          console.log("Photo found: ", fileUri);
+          return fileUri;
+        } else {
+          console.error("Photo not found");
+          return null;
+        }
+      } catch(error) {
+        console.error("Error while retrieving photo: ", error);
+        return null;
+      }
+    }
+
+    async function readFileAsync() {
+      const fileUri = FileSystem.documentDirectory + 'myFile.txt';
+  
+      try {
+          const content = await FileSystem.readAsStringAsync(fileUri);
+          console.log('File content:', content);
+      } catch (error) {
+          console.error('Error while reading file:', error);
+      }
+    }
+
+    const usePhoto = async () => {
+      console.log("Foto wird verwendet: ", imageUri);
+      setConfirmPhoto(false);
+
+      // const fileName = "photo_1";
+      // await savePhotoAsync(imageUri, fileName);
+
+      // console.log("llllllllllll");
+      // navigation.navigate('CreateRecipe', { imageUri: "Werwolf" });
+      // console.log("CameraTest, imageUri: ", imageUri);
+
+      imageUriExport = imageUri;
+
+    };
+
+    // export const savePhoto = async (fileName) => {
+    //   await savePhotoAsync(imageUri, fileName);
+    //   setImageUri(null);
+    //   console.log("const savePhoto");
+    // }
+
+    const retakePhoto = () => {
+      setImageUri(null);
+      setConfirmPhoto(false);
+    };
+
+    const getPhoto = async () => {
+      console.log("xxxxxxxxxxxxxxxxxx");
+
+      const fileName = "photo_1";
+      const photoUri = await getPhotoAsync(fileName);
+
+      if(photoUri) {
+        console.log("yyyyyyyyyyyyyyyyy");
+
+        setImageUri(null);
+        setLoadedPhotoUri(photoUri);
+      }
+    };
+
     return (
         <View style={styles.container}>
         <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
@@ -73,7 +174,24 @@ export default function CameraScreen() {
                 {/* <Button title={'Gallery'} onPress={pickImage} /> */}
         
         </CameraView>
-        {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />}
+
+        {confirmPhoto && (
+          <Modal visible={confirmPhoto} transparent={true} animationType='slide'>
+            <View style={styles.modalContainer}>
+              <Image source={{ uri: imageUri }} style={styles.previewImage}/>
+              <View style={styles.modalButtons}>
+                <Button title="Use Photo" onPress={usePhoto} />
+                <Button title="Retake" onPress={retakePhoto} />
+                <Button title="Get Photo" onPress={getPhoto} />
+              </View>
+            </View>
+          </Modal>
+        )}
+        {/* {imageUri && <Image source={{ uri: imageUri }} style={{ width: 400, height: 200 }} />} */}
+
+        {loadedPhotoUri && (
+            <Image source={{ uri: loadedPhotoUri }} style={styles.previewImage} />
+        )}
         </View>
     );
 }
@@ -106,4 +224,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  previewImage: {
+    width: '80%',
+    height: '50%',
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '80%',
+   },
+  previewImage: {
+    width: '80%',
+    height: '50%',
+    resizeMode: 'contain',
+    margin: 20,
+  },
 });
+
+export const getImageUri = () => {
+  return imageUriExport;
+};

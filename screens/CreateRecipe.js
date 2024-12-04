@@ -4,6 +4,9 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
+import * as FileSystem from 'expo-file-system';
+
+import { getImageUri } from '../camera/CameraTest';
 
 const databaseService = new DatabaseService();
 
@@ -16,11 +19,11 @@ export default RecipeList = ({navigation, route}) => {
     console.log(databaseService.getAllRecipes());
 
     const defaultData = {
-        category: '',
-        name: '',
-        ingredients: '',
-        instructions: '',
-        notice: ''
+        category: 'category test',
+        name: 'name test',
+        ingredients: 'ingredients test',
+        instructions: 'instructions test',
+        notice: 'notice test'
     }
 
     const [formData, setFormData] = useState(defaultData);
@@ -31,11 +34,78 @@ export default RecipeList = ({navigation, route}) => {
    }
 
    const handleSubmit = () => {
-    console.log(formData);
-    databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+    // console.log(formData);
+    // databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+
+    // databaseService.createRecipe('Fish', 'Test', 'some Ingredients', 'some instructions', 'some notice');
+    // databaseService.createRecipe('Meat', 'Test2', 'some Ingredients2', 'some instructions2', 'some notice2');
+    // databaseService.createRecipe('aaa', 'aaa', 'aaa', 'aaa', 'aaa');
+    // databaseService.createRecipe('bbb', 'bbb', 'bbb', 'bbb', 'bbb');
+    // databaseService.createRecipe('ddd', 'ddd', 'ddd', 'ddd', 'ddd');
+    // databaseService.createRecipe('ccc', 'ccc', 'ccc', 'ccc', 'ccc');
+
+
+    console.log(JSON.stringify(databaseService.getAllRecipes(), null, 2));
+
+    // databaseService.createCategory('ddd', '4');
+    // databaseService.createCategory('aaa', '1');
+    // databaseService.createCategory('ccc', '3');
+    // databaseService.createCategory('bbb', '2');
+
+    // console.log(JSON.stringify(databaseService.getAllCategories(), null, 2));
+    // console.log("databaseService.getCategory(): " + JSON.stringify(databaseService.getCategory('aaa')));
+
+
+    const test = getImageUri();
+    console.log("iamgeUriii: ", test);
+    savePhotoAsync(test, formData.name);
+    console.log("formData.name: ", formData.name);
+
+
     // after submission process, reset the form
     setFormData(defaultData);
     setValue(null);
+
+    
+  };
+
+  const handleSubmitDelete = () => {
+
+    // databaseService.updateRecipe('bbb', 'xxx', 'xxx', 'xxx', 'xxx');
+    // databaseService.updateRecipe('bbb', { name: 'bbb', category: 'xxx', ingredients: 'xxx', instructions: 'xxx', notice: 'xxx' });
+    databaseService.updateRecipe('bbb', { name: '', category: 'xxx', ingredients: 'xxx', instructions: '', notice: 'xxx' });
+
+
+    console.log(JSON.stringify(databaseService.getAllRecipes(), null, 2));
+
+    // databaseService.deleteCategory('aaa');
+    // console.log(JSON.stringify(databaseService.getAllCategories(), null, 2));
+
+    // databaseService.deleteRecipe('aaa');
+    // console.log(databaseService.getAllRecipes);
+    
+    
+    // console.log(formData);
+    // databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+    // // after submission process, reset the form
+    // setFormData(defaultData);
+    // setValue(null);
+  };
+
+  async function savePhotoAsync(imageUri, fileName) {
+    const fileUri = FileSystem.documentDirectory +  fileName + '.jpg';
+
+    console.log("savePhotoAsync(): ", fileUri);
+
+    try {
+        await FileSystem.copyAsync({
+          from: imageUri,
+          to: fileUri,
+        });
+        console.log('Photo saved in the File System successfully');
+    } catch (error) {
+        console.error('Error while saving photo:', error);
+    }
   };
 
   const [value, setValue] = useState(null);
@@ -95,8 +165,15 @@ export default RecipeList = ({navigation, route}) => {
                     value={formData.notice}
                 />
             </View>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera')} >
+                    <Text style={styles.text}>Camera</Text>
+                </TouchableOpacity>
+                
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                     <Text style={styles.text}>Save</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={handleSubmitDelete}>
+                    <Text style={styles.text}>Delete</Text>
                 </TouchableOpacity>
         </View>
     )
