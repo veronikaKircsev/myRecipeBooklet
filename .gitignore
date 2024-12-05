@@ -34,3 +34,12 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+android/*
+!android/.gitignore
+!android/app/src/
+!android/build.gradle
+!android/gradle/
+!android/gradlew
+!android/gradlew.bat
+!android/settings.gradle

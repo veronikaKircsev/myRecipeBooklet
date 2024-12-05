@@ -10,7 +10,7 @@ import {
 import { colors } from '../Color';
 import {CategoryContext} from "../context/CategoryContextProvider";
 
-const PopupExample = ({isVisible, toggle, navigation}) => {
+const Popup = ({isVisible, toggle, navigation}) => {
 
   const { categoryContext, setCategoryContext } = useContext(CategoryContext);
 
@@ -101,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PopupExample;
+export default Popup;

@@ -16,12 +16,7 @@ const RecipeListItem = ({recipe, navigation}) => {
      return (
         <TouchableOpacity style={styles.button}
         onPress={() => {navigation.navigate('Recipe',{
-            category: recipe.category,
-            name: recipe.name,
-            ingredients:recipe.ingredients,
-            instructions: recipe.instructions,
-            notice: recipe.notice,
-            like: like,
+            recipe: recipe,
             handleLike: handleLike})}}>
                     <View> 
                     <Text style={styles.text}>{recipe.name}</Text>

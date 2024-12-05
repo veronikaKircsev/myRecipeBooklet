@@ -4,6 +4,7 @@ import DatabaseService from '../database_elements/DatabaseService';
 import RecipeListItem from '../components/RecipeListItem';
 import {CategoryContext} from "../context/CategoryContextProvider";
 import { colors } from '../Color';
+import FeedBack from '../components/Feedback';
 
 const databaseService = new DatabaseService();
 let key = 0;
@@ -14,6 +15,7 @@ export default RecipeList = ({navigation, route}) => {
     const {homeScreen} = route.params !== undefined ? route.params : false;
 
     const [search, setSearch] = useState(route.params !== undefined ? homeScreen : false);
+    const [showSavedModal, setShowSavedModal] = useState(false);
 
     const [searchText, setSearchText] = useState('');
     
@@ -54,6 +56,7 @@ export default RecipeList = ({navigation, route}) => {
       }
       if (addNewRecipe) {
         recipes = databaseService.getAllRecipes();
+        setShowSavedModal(true);
       }
     }, [categoryContext]);
 
@@ -74,6 +77,7 @@ export default RecipeList = ({navigation, route}) => {
 
     return (
         <ScrollView style={styles.containerView}> 
+        <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)}/>
         {search && (
           <View style={styles.searchContainer}>
             <TextInput	placeholder="Search" style={styles.search} onChangeText={(text) => setSearchText(text)} />

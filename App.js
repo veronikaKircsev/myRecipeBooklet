@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './screens/HomeScreen';
 import RecipeList from './screens/RecipeList';
-import CreateRecipe from './screens/CreateRecipe';
+import EditRecipe from './screens/EditRecipe';
 import { colors } from './Color';
 import RecipeScreen from './screens/RecipeScreen';
 import {CategoryContextProvider} from './context/CategoryContextProvider';
@@ -34,7 +34,7 @@ export default function App() {
         }}>
       <Stack.Screen name="Home" component={HomeScreen} options={{title: 'My Recipe Booklet'}} />
       <Stack.Screen name="Recipies" component={RecipeList} />
-      <Stack.Screen name="Edit Recipe" component={CreateRecipe} />
+      <Stack.Screen name="Edit Recipe" component={EditRecipe} />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
       <Stack.Screen name="Create Category" component={CreateCategory} />
     </Stack.Navigator>

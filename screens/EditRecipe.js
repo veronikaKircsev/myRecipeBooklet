@@ -5,7 +5,7 @@ import {CategoryContext} from "../context/CategoryContextProvider";
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
 import {DBChangedContext} from '../context/DBChangedContextProvider';
-import RecipeList from './RecipeList';
+import FeedBack from '../components/Feedback';
 
 const databaseService = new DatabaseService();
 
@@ -15,6 +15,8 @@ export default EditRecipe = ({navigation, route}) => {
     
     const { categoryContext, setCategoryContext } = useContext(CategoryContext);
     const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
+    const [showSavedModal, setShowSavedModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     
     const categories = databaseService.getAllCategories();
 
@@ -47,12 +49,12 @@ export default EditRecipe = ({navigation, route}) => {
     useEffect(() => {
         if (formData.category === "+ Category") {
             navigation.navigate("Create Category", { createPage: true });
+            setValue(null);
+            setFormData({...formData, category: null});
         }
     }, [formData.category]);
 
    const handleSubmit = () => {
-    console.log(routeData);
-    console.log(formData);
     if (routeData!==undefined) {
         if (recipeList) {
             databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
@@ -63,13 +65,15 @@ export default EditRecipe = ({navigation, route}) => {
         newName(formData.name);
         databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
         setCategoryContext(formData.category);
-        navigation.goBack();
-        }
-    } else {
-    databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
     }
-    setFormData(defaultData);
-    setValue(null);
+} else {
+    databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+}
+
+    setDBChangedContext(!dBChangedContext);
+        setFormData(defaultData);
+        setValue(null);
+        navigation.goBack();
   };
     
     const [value, setValue] = useState(routeData!==undefined? routeData.category: categoryContext);
@@ -82,11 +86,17 @@ export default EditRecipe = ({navigation, route}) => {
         ]);
         setFormData({...formData, category: categoryContext});
         setValue(categoryContext);
+        if(showModal){
+        setShowSavedModal(true);
+        }else{
+        setShowModal(false);
+        }
     }, [dBChangedContext]);
 
     console.log(formData.category);
     return (
         <View style={styles.containerView}> 
+        <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)}/>
             <View style={styles.category}> 
                 <Text style={styles.text}>Category</Text>
                     <Dropdown

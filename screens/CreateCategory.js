@@ -33,11 +33,10 @@ export default CreateCategory = ({navigation, route}) => {
         databaseService.createCategory(formData.name, formData.iconId);
         if(createPage){
             setCategoryContext(formData.name);
-            console.log(categoryContext);
-            console.log(formData.name);
         }
         setDBChangedContext(!dBChangedContext);
         setFormData(defaultData);
+        navigation.goBack();
     }
 
     return (

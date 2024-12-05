@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import {CategoryItem} from '../components/CategoryItem';
-import PopupExample from '../components/PopUp';
+import Popup from '../components/PopUp';
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
 import {DBChangedContext} from '../context/DBChangedContextProvider';
+import FeedBack from '../components/Feedback';
 
 
 const databaseService = new DatabaseService();
@@ -15,6 +16,7 @@ let key = 0;
 export default HomeScreen = ({ navigation }) => {
 
   const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
+  const [showSavedModal, setShowSavedModal] = useState(false);
 
     const [isPopupVisible, setPopupVisible] = useState(false);
     const [categories, setCategories] = useState(databaseService.getAllCategories());
@@ -37,10 +39,12 @@ export default HomeScreen = ({ navigation }) => {
 
       const updatedCategories = databaseService.getAllCategories();
     setCategories(updatedCategories);
+    setShowSavedModal(true);
     }, [dBChangedContext]);
     
     return (
         <View style={styles.container}>
+          <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)} />
           <ScrollView>
             <View style={styles.containerView}> 
             {categories.map((category) =>
@@ -51,7 +55,7 @@ export default HomeScreen = ({ navigation }) => {
             <View style={styles.button}>
               <TouchableOpacity onPress={() => togglePopup()}>
                 <Image source={require('../assets/appIcons/plus.png')} style={styles.image} />
-                <PopupExample isVisible={isPopupVisible} toggle={togglePopup} navigation={navigation} />
+                <Popup isVisible={isPopupVisible} toggle={togglePopup} navigation={navigation} />
               </TouchableOpacity>
             </View>
         </View>

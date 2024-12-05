@@ -1,22 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image  } from 'react-native';
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
+import FeedBack from '../components/Feedback';
+import {DBChangedContext} from '../context/DBChangedContextProvider';
 
 
 const databaseService = new DatabaseService();
 
 export default RecipeScreen = ({navigation, route}) => {
 
-    const {category, name, ingredients, instructions, notice, like, handleLike} = route.params;
+    const {recipe,  handleLike} = route.params;
 
-    const [recipeLike, setLike] = useState(like);
+    const [recipeLike, setLike] = useState(recipe.like);
 
-    const [nameRecipe, setNameRecipe] = useState(name);
+    const [nameRecipe, setNameRecipe] = useState(recipe.name);
+    const [showSavedModal, setShowSavedModal] = useState(false);
+    const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
+    const [showModal, setShowModal] = useState(false);
 
+    useEffect(() => {
     navigation.setOptions({
         title: nameRecipe
       });
+    }, [nameRecipe]);
 
     function setNewNameRecipe(newName) {
         setNameRecipe(newName);
@@ -25,7 +32,7 @@ export default RecipeScreen = ({navigation, route}) => {
     useEffect(() => {
       navigation.setOptions({
         headerRight: () => (
-            <TouchableOpacity style={styles.likeButton} onPress={()=>{databaseService.updateLike(name),
+            <TouchableOpacity style={styles.likeButton} onPress={()=>{databaseService.updateLike(recipe.name),
                 handleLike(), setLike(!recipeLike)
             }}>
                             {recipeLike ?
@@ -36,28 +43,37 @@ export default RecipeScreen = ({navigation, route}) => {
       });
     }, [navigation, recipeLike]);
 
+    useEffect(() => {
+        if(showModal){
+            setShowSavedModal(true);
+            }else{
+            setShowModal(false);
+            }
+    }, [dBChangedContext]);
+
   
    
     return (
         <ScrollView style={styles.container}>
+            <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)} />
             <View style={styles.elements}>
                 <Text style={styles.text}>Ingredients:</Text>
-                <Text style={styles.textContainer}>{ingredients}</Text>
+                <Text style={styles.textContainer}>{recipe.ingredients}</Text>
             </View>
             <View style={styles.elements}>
                 <Text style={styles.text}>Instructions:</Text>
-                <Text style={styles.textContainer}>{instructions}</Text>
+                <Text style={styles.textContainer}>{recipe.instructions}</Text>
             </View>
             <View style={styles.elements}>
             <Text style={styles.text}>Notice:</Text>
-            <Text style={styles.textContainer}>{notice}</Text>
+            <Text style={styles.textContainer}>{recipe.notice}</Text>
             </View>
             <TouchableOpacity style={styles.editContainer} onPress={() => {navigation.navigate('Edit Recipe',
-                {category: category, 
-                name: name, 
-                ingredients: ingredients, 
-                instructions: instructions, 
-                notice: notice,
+                {category: recipe.category, 
+                name: recipe.name, 
+                ingredients: recipe.ingredients, 
+                instructions: recipe.instructions, 
+                notice: recipe.notice,
                 newName: setNewNameRecipe}
             )}}>
                 <Image style={styles.edit} source={require('../assets/appIcons/modify.png')}/>
