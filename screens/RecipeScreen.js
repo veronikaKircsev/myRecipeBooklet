@@ -15,6 +15,9 @@ export default RecipeScreen = ({navigation, route}) => {
     const [recipeLike, setLike] = useState(recipe.like);
 
     const [nameRecipe, setNameRecipe] = useState(recipe.name);
+    const [ingredients, setIngredients] = useState(recipe.ingredients);
+    const [instructions, setInstructions] = useState(recipe.instructions);
+    const [notice, setNotice] = useState(recipe.notice);
     const [showSavedModal, setShowSavedModal] = useState(false);
     const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
     const [showModal, setShowModal] = useState(false);
@@ -58,15 +61,15 @@ export default RecipeScreen = ({navigation, route}) => {
             <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)} />
             <View style={styles.elements}>
                 <Text style={styles.text}>Ingredients:</Text>
-                <Text style={styles.textContainer}>{recipe.ingredients}</Text>
+                <Text style={styles.textContainer}>{ingredients}</Text>
             </View>
             <View style={styles.elements}>
                 <Text style={styles.text}>Instructions:</Text>
-                <Text style={styles.textContainer}>{recipe.instructions}</Text>
+                <Text style={styles.textContainer}>{instructions}</Text>
             </View>
             <View style={styles.elements}>
             <Text style={styles.text}>Notice:</Text>
-            <Text style={styles.textContainer}>{recipe.notice}</Text>
+            <Text style={styles.textContainer}>{notice}</Text>
             </View>
             <TouchableOpacity style={styles.editContainer} onPress={() => {navigation.navigate('Edit Recipe',
                 {category: recipe.category, 
@@ -74,7 +77,11 @@ export default RecipeScreen = ({navigation, route}) => {
                 ingredients: recipe.ingredients, 
                 instructions: recipe.instructions, 
                 notice: recipe.notice,
-                newName: setNewNameRecipe}
+                newName: setNewNameRecipe,
+                newIngredients: setIngredients,
+                newInstructions: setInstructions,
+                newNotice: setNotice
+            }
             )}}>
                 <Image style={styles.edit} source={require('../assets/appIcons/modify.png')}/>
             </TouchableOpacity>

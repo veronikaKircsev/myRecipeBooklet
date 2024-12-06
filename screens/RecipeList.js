@@ -5,6 +5,7 @@ import RecipeListItem from '../components/RecipeListItem';
 import {CategoryContext} from "../context/CategoryContextProvider";
 import { colors } from '../Color';
 import FeedBack from '../components/Feedback';
+import {DBChangedContext} from '../context/DBChangedContextProvider';
 
 const databaseService = new DatabaseService();
 let key = 0;
@@ -16,10 +17,15 @@ export default RecipeList = ({navigation, route}) => {
 
     const [search, setSearch] = useState(route.params !== undefined ? homeScreen : false);
     const [showSavedModal, setShowSavedModal] = useState(false);
+    const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
 
     const [searchText, setSearchText] = useState('');
     
     let recipes = databaseService.getAllRecipes();
+
+    useEffect(() => {
+      recipes = databaseService.getAllRecipes();
+    }, [dBChangedContext]);
     
     const sortedRecipe = [...recipes].sort((a, b) => { 
         if (a.isLiked==='true' && b.isLiked==='false') return -1;

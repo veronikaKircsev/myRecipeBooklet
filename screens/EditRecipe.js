@@ -33,7 +33,7 @@ export default EditRecipe = ({navigation, route}) => {
         notice: ''
     }
 
-    const {category, name, ingredients, instructions, notice, newName, recipeList, newAdded, fromHome} = route.params!==undefined? route.params: defaultData;
+    const {category, name, ingredients, instructions, notice, newName, recipeList, newAdded, fromHome, newIngredients, newInstructions, newNotice} = route.params!==undefined? route.params: defaultData;
     const routeData = {
             category: category,
             name: name,
@@ -63,18 +63,21 @@ export default EditRecipe = ({navigation, route}) => {
             databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
         } else{
         newName(formData.name);
+        newIngredients(formData.ingredients);
+        newInstructions(formData.instructions);
+        newNotice(formData.notice);
         databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
         setCategoryContext(formData.category);
-    }
-} else {
-    databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
-}
+            }
+        } else {
+        databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+        }
 
-    setDBChangedContext(!dBChangedContext);
+        setDBChangedContext(!dBChangedContext);
         setFormData(defaultData);
         setValue(null);
         navigation.goBack();
-  };
+    };
     
     const [value, setValue] = useState(routeData!==undefined? routeData.category: categoryContext);
 
