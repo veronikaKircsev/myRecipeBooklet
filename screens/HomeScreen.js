@@ -1,20 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button, FlatList, Modal } from 'react-native';
 
 import CategoryItem from '../components/CategoryItem';
 import PopupExample from '../components/PopUp';
 import { colors } from '../Color';
 
+import CameraScreen from '../camera/CameraScreen.js';
+
 import DatabaseService from '../database_elements/DatabaseService';
 
 const databaseService = new DatabaseService();
 databaseService.initializeDefaultCategories();
+
+databaseService.initRecipies();
+
 let key = 0;
 
 
 
 export default HomeScreen = ({ navigation }) => {
 
+  const [cameraVisible, setCameraVisible] = useState(false);
   
   const categories = databaseService.getAllCategories();
   console.log(categories);
@@ -38,6 +44,18 @@ export default HomeScreen = ({ navigation }) => {
             <PopupExample isVisible={isPopupVisible} toggle={togglePopup} navigation={navigation} />
             </TouchableOpacity>
             </View>
+
+            {/* <Button title="Open Camera" onPress={() => setCameraVisible(true)} />
+            <Modal visible={cameraVisible} animationType="slide">
+                <CameraScreen />
+                <Button title="Close Camera" onPress={() => setCameraVisible(false)} />
+            </Modal> */}
+
+            {/* <Button 
+              title="Open Camera" 
+              onPress={() => navigation.navigate('Camera')} 
+            /> */}
+
         </View>
     );
     }

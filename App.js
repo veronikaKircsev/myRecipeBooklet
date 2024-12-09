@@ -9,6 +9,8 @@ import RecipeList from './screens/RecipeList';
 import CreateRecipe from './screens/CreateRecipe';
 import { colors } from './Color';
 
+import CameraScreen from './camera/CameraTest';
+
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -29,6 +31,7 @@ export default function App() {
           }} />
       <Stack.Screen name="Recipies" component={RecipeList} />
       <Stack.Screen name="Edit Recipe" component={CreateRecipe} />
+      <Stack.Screen name="Camera" component={CameraScreen} />
     </Stack.Navigator>
   </NavigationContainer>
   );

@@ -5,7 +5,7 @@ import {Camera} from 'expo-camera'
 
 const cameraRef = React.useRef<Camera>(null);
 
-console.log("CAMERA: " + cameraRef);
+console.log("CAMERA: " + Camera);
 
 export default function CameraScreen() {
   

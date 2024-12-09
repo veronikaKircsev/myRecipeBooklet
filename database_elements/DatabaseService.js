@@ -105,10 +105,6 @@ class DatabaseService {
         this.createCategory('Main Dish', '2')
         this.createCategory('Dessert', '3')
         this.createCategory('Try Later', '4')
-        this.createCategory('aaa', '5')
-        this.createCategory('bbb', '6')
-        this.createCategory('ccc', '7')
-
     }
 
     initRecipies() {
