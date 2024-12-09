@@ -12,7 +12,9 @@ import DatabaseService from '../database_elements/DatabaseService';
 const databaseService = new DatabaseService();
 databaseService.initializeDefaultCategories();
 
-databaseService.initRecipies();
+// databaseService.initRecipies();
+
+// databaseService.initializeData();
 
 let key = 0;
 

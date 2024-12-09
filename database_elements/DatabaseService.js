@@ -17,6 +17,7 @@ class DatabaseService {
             ingredients: { type: 'string' },
             instructions: { type: 'string' }, 
             notice: { type: 'string' },
+            dish: {type: 'string'},
             isLiked: { type: 'boolean' }
         },
         category: {
@@ -24,20 +25,42 @@ class DatabaseService {
             url: { type: 'string' }
         },
     })
-    DatabaseService.instance = this}
+
+    DatabaseService.instance = this;
+
+}
+
+    async saveToStorage() {
+        try {
+            await this.persister.save();
+            console.log("Daten manuell gespeichert");
+        } catch (error) {
+            console.error("Fehler beim manuellen Speichern:", error);
+        }
+    }
+
+    async loadFromStorage() {
+        try {
+            await this.persister.load();
+            console.log("Daten manuell geladen");
+        } catch (error) {
+            console.error("Fehler beim manuellen Laden:", error);
+        }
+    }
     
-    createRecipe(category, name, ingredients, instructions, notice) {
+    createRecipe(category, name, ingredients, instructions, notice, dish) {
         this.store.setRow(RECIPE, name, { 
                         name: name,
                         category: category, 
                         ingredients: ingredients, 
                         instructions: instructions, 
-                        notice: notice });
+                        notice: notice,
+                        dish: dish });
     }
 
     getRecipe(value) {
         const data = this.store.getRow(RECIPE, value);
-        const recipe = new Recipe(data.name, data.category, data.ingredients, data.instructions, data.notice);
+        const recipe = new Recipe(data.name, data.category, data.ingredients, data.instructions, data.notice, data.dish);
         return recipe;
     }
 
@@ -50,7 +73,8 @@ class DatabaseService {
                 data.category,
                 data.ingredients,
                 data.instructions,
-                data.notice
+                data.notice,
+                data.dish
             )
         );
 
@@ -85,7 +109,6 @@ class DatabaseService {
 
         return category;
     }
-
     
     getAllCategories() {
         const rowData = this.store.getTable(CATEGORY);
@@ -107,14 +130,14 @@ class DatabaseService {
         this.createCategory('Try Later', '4')
     }
 
-    initRecipies() {
-        this.createRecipe('Fish', 'Test', 'some Ingredients', 'some instructions', 'some notice');
-        this.createRecipe('Meat', 'Test2', 'some Ingredients2', 'some instructions2', 'some notice2');
-        this.createRecipe('aaa', 'aaa', 'aaa', 'aaa', 'aaa');
-        this.createRecipe('bbb', 'bbb', 'bbb', 'bbb', 'bbb');
-        this.createRecipe('ddd', 'ddd', 'ddd', 'ddd', 'ddd');
-        this.createRecipe('ccc', 'ccc', 'ccc', 'ccc', 'ccc');
-    }
+    // initRecipies() {
+    //     this.createRecipe('Fish', 'Test', 'some Ingredients', 'some instructions', 'some notice');
+    //     this.createRecipe('Meat', 'Test2', 'some Ingredients2', 'some instructions2', 'some notice2');
+    //     this.createRecipe('aaa', 'aaa', 'aaa', 'aaa', 'aaa');
+    //     this.createRecipe('bbb', 'bbb', 'bbb', 'bbb', 'bbb');
+    //     this.createRecipe('ddd', 'ddd', 'ddd', 'ddd', 'ddd');
+    //     this.createRecipe('ccc', 'ccc', 'ccc', 'ccc', 'ccc');
+    // }
 
     updateRecipe(nameUpdate, { name, category, ingredients, instructions, notice }) {
         console.log("updateRecipe: " + name + " " + category + " " + ingredients + " " + instructions + " " + notice);
@@ -140,8 +163,6 @@ class DatabaseService {
         }
     }
     
-    
-
     deleteRecipe(name) {
         const tableData = this.store.getTable(RECIPE);
         const rowId = Object.keys(tableData).find(key => tableData[key].name === name);
@@ -169,6 +190,48 @@ class DatabaseService {
             console.warn(`Category with name "${name}" not found.`);
         }
     }
+
+    listAllRecipes() {
+        const recipes = this.getAllRecipes();
+        console.log("All recipes: ", recipes);
+    };
+
+    // async saveToAsyncStorage(data) {
+    //     try {
+    //         await AsyncStorage.setItem('myDatabase', JSON.stringify(data));
+    //         console.log('Data saved to AsyncStorage');
+    //     } catch (error) {
+    //         console.error('Error saving data to AsyncStorage:', error);
+    //     }
+    // }
+    
+    // async loadFromAsyncStorage() {
+    //     try {
+    //         const jsonData = await AsyncStorage.getItem('myDatabase');
+    //         if (jsonData !== null) {
+    //             const data = JSON.parse(jsonData);
+    //             console.log('Data loaded from AsyncStorage', data);
+    //             return data;
+    //         }
+    //     } catch (error) {
+    //         console.error('Error loading data from AsyncStorage:', error);
+    //     }
+    //     return null;
+    // };
+
+    // async checkData() {
+    //     try {
+    //         const data = await AsyncStorage.getItem('myDatabase');
+    //         if (data) {
+    //             console.log('Daten gefunden:', JSON.parse(data));
+    //         } else {
+    //             console.log('Keine Daten vorhanden.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Fehler beim Abrufen der Daten:', error);
+    //     }
+    // };
+    
 }
 
 export default DatabaseService;

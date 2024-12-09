@@ -1,17 +1,36 @@
 import { CameraView, CameraType, useCameraPermissions, Camera } from 'expo-camera';
 import { useState, useRef, useEffect } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image, Modal } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View, Image, Modal, ScrollView } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 
 let imageUriExport = null;
+let imageUriExportIngredients = null;
+let imageUriExportInstructions = null;
+let imageUriExportDish = null;
 
-export default function CameraScreen() {
+// three camera buttons for ingredients, notice, prepare
+// one button for the dish itself !!OPTIONAL!!
+// FileSystem is a service
+// Database save the URI of the photo file system
+// Database needs to save in JSON to a file or Persistent Database from Tinybase
+// get Photo from Device Library ERROR: no suitable url request handler found for ph:
+// File system URI is data.ingredients || data.notice
+// was lief gut, was lief nicht gut, report schreiben und senden
+
+export default function CameraScreen({route}) {
+
+    const {source} = route.params;
+
     const {facing, setFacing} = useState<CameraType>('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState();
     const [confirmPhoto, setConfirmPhoto] = useState(false);
     const [loadedPhotoUri, setLoadedPhotoUri] = useState(null);
-    // let cameraRef = useRef();
+
+    const [albums, setAlbums] = useState(null);
+    const [permissionMediaLibrary, requestPermissionMediaLibrary] = MediaLibrary.usePermissions();
+
     let cameraRef = useRef(null);
 
     useEffect(() => {
@@ -128,7 +147,17 @@ export default function CameraScreen() {
       // navigation.navigate('CreateRecipe', { imageUri: "Werwolf" });
       // console.log("CameraTest, imageUri: ", imageUri);
 
-      imageUriExport = imageUri;
+      // imageUriExport = imageUri;
+
+      console.log("route: " + source);
+
+      if(source === 'ingredients') {
+        imageUriExportIngredients = imageUri;
+      } else if(source === 'instructions') {
+        imageUriExportInstructions = imageUri;
+      } else if(source === 'dish') {
+        imageUriExportDish = imageUri;
+      }
 
     };
 
@@ -144,21 +173,28 @@ export default function CameraScreen() {
     };
 
     const getPhoto = async () => {
-      console.log("xxxxxxxxxxxxxxxxxx");
-
       const fileName = "photo_1";
       const photoUri = await getPhotoAsync(fileName);
 
       if(photoUri) {
-        console.log("yyyyyyyyyyyyyyyyy");
-
         setImageUri(null);
         setLoadedPhotoUri(photoUri);
       }
     };
 
+    async function getAlbums() {
+      if (permissionMediaLibrary.status !== 'granted') {
+        await requestPermissionMediaLibrary();
+      }
+      const fetchedAlbums = await MediaLibrary.getAlbumsAsync({
+        includeSmartAlbums: true,
+      });
+      setAlbums(fetchedAlbums);
+    }
+
     return (
         <View style={styles.container}>
+        <Text>Camera opened from : {source}</Text>
         <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
             <View style={styles.buttonContainer}>
             {/* <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
@@ -168,11 +204,16 @@ export default function CameraScreen() {
                 <TouchableOpacity style={styles.button} onPress={takePicture}>
                     <Text style={styles.text}>Take Picture</Text>
                 </TouchableOpacity>
+                
+                {/* <TouchableOpacity style={styles.button} onPress={getAlbums}>
+                // <Text style={styles.text}>Get albums</Text>
+                {/* <Button onPress={getAlbums} title="Get albums" /> */}
+                  {/* <ScrollView> */}
+                    {/* {albums && albums.map((album) => <AlbumEntry album={album} />)} */}
+                  {/* </ScrollView> */}
+                  {/* </TouchableOpacity> */} 
             </View>
 
-                {/* <Button title={'Take Picture'} onPress={takePicture} /> */}
-                {/* <Button title={'Gallery'} onPress={pickImage} /> */}
-        
         </CameraView>
 
         {confirmPhoto && (
@@ -182,7 +223,7 @@ export default function CameraScreen() {
               <View style={styles.modalButtons}>
                 <Button title="Use Photo" onPress={usePhoto} />
                 <Button title="Retake" onPress={retakePhoto} />
-                <Button title="Get Photo" onPress={getPhoto} />
+                {/* <Button title="Get Albums" onPress={getAlbums} /> */}
               </View>
             </View>
           </Modal>
@@ -194,6 +235,31 @@ export default function CameraScreen() {
         )}
         </View>
     );
+}
+
+function AlbumEntry({ album }) {
+  const [assets, setAssets] = useState([]);
+
+  useEffect(() => {
+    async function getAlbumAssets() {
+      const albumAssets = await MediaLibrary.getAssetsAsync({ album });
+      setAssets(albumAssets.assets);
+    }
+    getAlbumAssets();
+  }, [album]);
+
+  return (
+    <View key={album.id} style={styles.albumContainer}>
+      <Text>
+        {album.title} - {album.assetCount ?? 'no'} assets
+      </Text>
+      <View style={styles.albumAssetsContainer}>
+        {assets && assets.map((asset) => (
+          <Image source={{ uri: asset.uri }} width={50} height={50} />
+        ))}
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -251,3 +317,23 @@ const styles = StyleSheet.create({
 export const getImageUri = () => {
   return imageUriExport;
 };
+
+export const getImageUriExportIngredients = () => {
+  return imageUriExportIngredients;
+};
+
+export const getImageUriExportInstructions = () => {
+  return imageUriExportInstructions;
+};
+
+export const getImageUriExportDish = () => {
+  return imageUriExportDish;
+};
+
+export const resetImageUris = () => {
+  imageUriExportIngredients = null;
+  imageUriExportInstructions = null;
+  imageUriExportDish = null;
+
+  console.log('imageUriExportIngredients' + imageUriExportIngredients + ", imageUriExportInstructions: " + imageUriExportInstructions + ", imageUriExportDish" + imageUriExportDish);
+}

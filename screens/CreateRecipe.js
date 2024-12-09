@@ -4,20 +4,29 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
+import DatabaseService2 from '../database_elements/SQLiteService';
 import * as FileSystem from 'expo-file-system';
 
-import { getImageUri } from '../camera/CameraTest';
+import { getImageUri, getImageUriExportIngredients, getImageUriExportInstructions, getImageUriExportDish, resetImageUris } from '../camera/CameraTest';
+import * as SQLite from 'expo-sqlite';
+import { createStore } from 'tinybase';
 
 const databaseService = new DatabaseService();
 
-const categories = databaseService.getAllCategories();
 
+
+const databaseService2 = new DatabaseService2();
+// await databaseService2.initDatabase();
+const categories = databaseService.getAllCategories();
 const data = categories.map(category => ({label: category.name, value: category.name}));
+
 
 export default RecipeList = ({navigation, route}) => {
 
-    console.log(databaseService.getAllRecipes());
+    // console.log(databaseService.getAllRecipes());
 
+   
+      
     const defaultData = {
         category: 'category test',
         name: 'name test',
@@ -34,64 +43,77 @@ export default RecipeList = ({navigation, route}) => {
    }
 
    const handleSubmit = () => {
+
+    // databaseService2.insertTest('newValue', 999).then(newId => {
+    //     console.log('New entry ID:', newId);
+    // })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    // });
+
+
+
+    const ingredientsUri = getImageUriExportIngredients();
+    const instructionsUri = getImageUriExportInstructions();
+    const dishUri = getImageUriExportDish();
+
+    if(ingredientsUri !== null) {
+        formData.ingredients = ingredientsUri;
+    }
+    if(instructionsUri !== null) {
+        formData.instructions = instructionsUri;
+    }
+   
+
+    databaseService2.insertRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice, dishUri).then(newId => {
+        console.log('New entry ID:', newId);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+
     // console.log(formData);
     // databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
 
-    // databaseService.createRecipe('Fish', 'Test', 'some Ingredients', 'some instructions', 'some notice');
-    // databaseService.createRecipe('Meat', 'Test2', 'some Ingredients2', 'some instructions2', 'some notice2');
-    // databaseService.createRecipe('aaa', 'aaa', 'aaa', 'aaa', 'aaa');
-    // databaseService.createRecipe('bbb', 'bbb', 'bbb', 'bbb', 'bbb');
-    // databaseService.createRecipe('ddd', 'ddd', 'ddd', 'ddd', 'ddd');
-    // databaseService.createRecipe('ccc', 'ccc', 'ccc', 'ccc', 'ccc');
+    // console.log(JSON.stringify(databaseService.getAllRecipes(), null, 2));
 
+    if(ingredientsUri !== null) {
+        formData.ingredients = ingredientsUri;
+    }
+    if(instructionsUri !== null) {
+        formData.instructions = instructionsUri;
+    }
+    // if(dishUri  
+    databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice, dishUri);
+    resetImageUris();
 
-    console.log(JSON.stringify(databaseService.getAllRecipes(), null, 2));
-
-    // databaseService.createCategory('ddd', '4');
-    // databaseService.createCategory('aaa', '1');
-    // databaseService.createCategory('ccc', '3');
-    // databaseService.createCategory('bbb', '2');
-
-    // console.log(JSON.stringify(databaseService.getAllCategories(), null, 2));
-    // console.log("databaseService.getCategory(): " + JSON.stringify(databaseService.getCategory('aaa')));
-
-
-    const test = getImageUri();
-    console.log("iamgeUriii: ", test);
-    savePhotoAsync(test, formData.name);
-    console.log("formData.name: ", formData.name);
-
+    // console.log("test1: " + ingredientsUri + " test2: " + instructionsUri + " test3: " + dishUri);
 
     // after submission process, reset the form
     setFormData(defaultData);
     setValue(null);
-
-    
   };
 
-  const handleSubmitDelete = () => {
+  const handleSubmitDelete = async () => {
 
-    // databaseService.updateRecipe('bbb', 'xxx', 'xxx', 'xxx', 'xxx');
-    // databaseService.updateRecipe('bbb', { name: 'bbb', category: 'xxx', ingredients: 'xxx', instructions: 'xxx', notice: 'xxx' });
-    databaseService.updateRecipe('bbb', { name: '', category: 'xxx', ingredients: 'xxx', instructions: '', notice: 'xxx' });
+    const allTests = await databaseService2.getAllRecipes();
+    console.log('All rows:', allTests);
 
+    const firstTest = await databaseService2.getFirstRecipe();
+    console.log('First row:', firstTest);
 
-    console.log(JSON.stringify(databaseService.getAllRecipes(), null, 2));
-
-    // databaseService.deleteCategory('aaa');
-    // console.log(JSON.stringify(databaseService.getAllCategories(), null, 2));
-
-    // databaseService.deleteRecipe('aaa');
-    // console.log(databaseService.getAllRecipes);
     
-    
-    // console.log(formData);
+    // console.log(JSON.stringify(databaseService.getAllRecipes(), null, 2));
+
+        
+
     // databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
-    // // after submission process, reset the form
+    // after submission process, reset the form
     // setFormData(defaultData);
     // setValue(null);
   };
-
+  
   async function savePhotoAsync(imageUri, fileName) {
     const fileUri = FileSystem.documentDirectory +  fileName + '.jpg';
 
@@ -109,7 +131,6 @@ export default RecipeList = ({navigation, route}) => {
   };
 
   const [value, setValue] = useState(null);
-
 
     return (
         <View style={styles.containerView}> 
@@ -142,7 +163,13 @@ export default RecipeList = ({navigation, route}) => {
                 />
             </View>
             <View style={styles.ingredients}>
-                <Text style={styles.text}>Ingredients</Text>
+                <View style={styles.row}>
+                    <Text style={styles.text}>Ingredients</Text>
+
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'ingredients'})} >
+                        <Text style={styles.text}>Camera</Text>
+                    </TouchableOpacity>
+                </View>
                 <TextInput style={styles.ingredientsField} multiline={true} textAlignVertical="top"
                 numberOfLines={10} placeholder="Ingredients"
                     onChangeText={(text) => setFormData({...formData, ingredients: text})}
@@ -150,7 +177,14 @@ export default RecipeList = ({navigation, route}) => {
                 />
             </View>
             <View style={styles.instructions}>
+            <View style={styles.row}>
+
                 <Text style={styles.text}>Instructions</Text>
+                
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'instructions'})} >
+                    <Text style={styles.text}>Camera</Text>
+                </TouchableOpacity>
+            </View>
                 <TextInput style={styles.instructionsField} multiline={true} textAlignVertical="top"
                 numberOfLines={10} placeholder="Instructions"
                     onChangeText={(text) => setFormData({...formData, instructions: text})}
@@ -165,7 +199,7 @@ export default RecipeList = ({navigation, route}) => {
                     value={formData.notice}
                 />
             </View>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera')} >
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'dish'})} >
                     <Text style={styles.text}>Camera</Text>
                 </TouchableOpacity>
                 
@@ -335,6 +369,9 @@ const styles = StyleSheet.create({
             borderRadius: 10,
             backgroundColor: 'white',
         },
-      
-    
+        row: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        }
 });
