@@ -181,6 +181,8 @@ class DatabaseService {
             const sqliteRecipes = await sqliteService.getAllRecipes();
     
             sqliteRecipes.forEach(recipe => {
+                console.log(recipe);
+                console.log('\n');
                 this.createDefaultRecipe(recipe.category, recipe.name, recipe.ingredients, recipe.instructions, recipe.notice, recipe.isLiked);
                 this.store.setRow(RECIPE, recipe.name, {
                     category: recipe.category,

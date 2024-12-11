@@ -36,26 +36,26 @@ class SQLiteService {
           isLiked TEXT
         );
         
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Soup', 'Tomato Soup', 'Tomatoes, Water, Salt, Pepper', 'Boil and blend.', 'Serve hot.', '', '');
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Grilled Chicken', 'Chicken, Spices, Olive Oil', 'Grill until golden brown.', 'Ensure internal temp is 165°F.', '', '');
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Chocolate Cake', 'Flour, Cocoa, Sugar, Eggs', 'Mix and bake at 350°F.', 'Cool before serving.', '', '');
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Pancakes', 'Flour, Milk, Eggs, Syrup', 'Cook on a hot skillet.', 'Flip when bubbly.', '', '');
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Nachos', 'Tortilla Chips, Cheese, Jalapeños', 'Bake until cheese melts.', 'Serve with salsa.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Soup', 'Minestrone', 'Vegetables, Pasta, Beans', 'Simmer for 30 minutes.', 'Season to taste.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Spaghetti Bolognese', 'Spaghetti, Ground Beef, Tomato Sauce', 'Cook and mix sauce.', 'Top with parmesan.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Ice Cream Sundae', 'Ice Cream, Chocolate Syrup, Nuts', 'Layer in a bowl.', 'Add whipped cream.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Omelette', 'Eggs, Cheese, Vegetables', 'Whisk and cook.', 'Fold before serving.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Popcorn', 'Corn Kernels, Butter, Salt', 'Pop in a pan.', 'Avoid burning.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Soup', 'Chicken Noodle Soup', 'Chicken, Noodles, Broth', 'Simmer until cooked.', 'Add parsley for garnish.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Beef Stew', 'Beef, Carrots, Potatoes', 'Cook on low heat.', 'Perfect for cold days.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Apple Pie', 'Apples, Sugar, Cinnamon, Dough', 'Bake until crust is golden.', 'Let cool before slicing.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Avocado Toast', 'Bread, Avocado, Salt, Pepper', 'Toast and spread avocado.', 'Top with chili flakes.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Hummus and Veggies', 'Chickpeas, Olive Oil, Veggies', 'Blend and serve with veggies.', 'Drizzle olive oil on top.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Soup', 'Clam Chowder', 'Clams, Potatoes, Cream', 'Simmer until creamy.', 'Serve with crackers.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Salmon Fillet', 'Salmon, Lemon, Dill', 'Bake for 15 minutes.', 'Serve with lemon wedges.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Brownies', 'Chocolate, Butter, Sugar, Flour', 'Bake at 350°F.', 'Let cool before cutting.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Smoothie Bowl', 'Fruits, Yogurt, Granola', 'Blend and top with granola.', 'Serve chilled.', '', '' );
-        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Cheese Platter', 'Cheese, Crackers, Fruits', 'Arrange on a platter.', 'Pair with wine.', '', '' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Soup', 'Tomato Soup', 'Tomatoes, Water, Salt, Pepper', 'Boil and blend.', 'Serve hot.', '', 'false');
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Grilled Chicken', 'Chicken, Spices, Olive Oil', 'Grill until golden brown.', 'Ensure internal temp is 165°F.', '', 'false');
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Chocolate Cake', 'Flour, Cocoa, Sugar, Eggs', 'Mix and bake at 350°F.', 'Cool before serving.', '', 'false');
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Pancakes', 'Flour, Milk, Eggs, Syrup', 'Cook on a hot skillet.', 'Flip when bubbly.', '', 'false');
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Nachos', 'Tortilla Chips, Cheese, Jalapeños', 'Bake until cheese melts.', 'Serve with salsa.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Soup', 'Minestrone', 'Vegetables, Pasta, Beans', 'Simmer for 30 minutes.', 'Season to taste.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Spaghetti Bolognese', 'Spaghetti, Ground Beef, Tomato Sauce', 'Cook and mix sauce.', 'Top with parmesan.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Ice Cream Sundae', 'Ice Cream, Chocolate Syrup, Nuts', 'Layer in a bowl.', 'Add whipped cream.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Omelette', 'Eggs, Cheese, Vegetables', 'Whisk and cook.', 'Fold before serving.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Popcorn', 'Corn Kernels, Butter, Salt', 'Pop in a pan.', 'Avoid burning.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Soup', 'Chicken Noodle Soup', 'Chicken, Noodles, Broth', 'Simmer until cooked.', 'Add parsley for garnish.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Beef Stew', 'Beef, Carrots, Potatoes', 'Cook on low heat.', 'Perfect for cold days.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Apple Pie', 'Apples, Sugar, Cinnamon, Dough', 'Bake until crust is golden.', 'Let cool before slicing.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Avocado Toast', 'Bread, Avocado, Salt, Pepper', 'Toast and spread avocado.', 'Top with chili flakes.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Hummus and Veggies', 'Chickpeas, Olive Oil, Veggies', 'Blend and serve with veggies.', 'Drizzle olive oil on top.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Soup', 'Clam Chowder', 'Clams, Potatoes, Cream', 'Simmer until creamy.', 'Serve with crackers.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Main Dish', 'Salmon Fillet', 'Salmon, Lemon, Dill', 'Bake for 15 minutes.', 'Serve with lemon wedges.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Brownies', 'Chocolate, Butter, Sugar, Flour', 'Bake at 350°F.', 'Let cool before cutting.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Try Later', 'Smoothie Bowl', 'Fruits, Yogurt, Granola', 'Blend and top with granola.', 'Serve chilled.', '', 'false' );
+        INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES ('Dessert', 'Cheese Platter', 'Cheese, Crackers, Fruits', 'Arrange on a platter.', 'Pair with wine.', '', 'false' );
         
         CREATE TABLE IF NOT EXISTS category (
           id INTEGER PRIMARY KEY NOT NULL,

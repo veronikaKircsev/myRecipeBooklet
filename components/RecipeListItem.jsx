@@ -6,7 +6,9 @@ import DatabaseService from "../database_elements/DatabaseService";
 const database = new DatabaseService();
 const RecipeListItem = ({recipe, navigation}) => {
 
-    const [like, setLike] = useState(recipe.isLiked==='true'? true:false);
+    const [like, setLike] = useState(recipe.isLiked ==='true'? true: false);
+
+    console.log(recipe.isLiked);
 
     function handleLike() {
         setLike(!like);

@@ -12,6 +12,8 @@ let key = 0;
 
 export default RecipeList = ({navigation, route}) => {
 
+  console.log(databaseService.getAllRecipes());
+
     const { categoryContext} = useContext(CategoryContext);
     const {homeScreen} = route.params !== undefined ? route.params : false;
 
