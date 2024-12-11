@@ -10,6 +10,7 @@ const RecipeListItem = ({recipe, navigation}) => {
 
     function handleLike() {
         setLike(!like);
+        recipe.isLiked = like;
         database.updateLike(recipe.name);
     };
       
