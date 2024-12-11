@@ -6,11 +6,15 @@ import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
 import {DBChangedContext} from '../context/DBChangedContextProvider';
 import FeedBack from '../components/Feedback';
+import SQLiteService from '../database_elements/SQLiteService';
 
-
+const sqliteService = new SQLiteService();
 const databaseService = new DatabaseService();
-databaseService.initializeDefaultCategories();
-databaseService.generateTestRecipes();
+
+// databaseService.syncCategoriesFromSQLite();
+// databaseService.initializeDefaultCategories();
+// databaseService.generateTestRecipes();
+
 let key = 0;
 
 export default HomeScreen = ({ navigation }) => {
@@ -19,11 +23,34 @@ export default HomeScreen = ({ navigation }) => {
   const [showSavedModal, setShowSavedModal] = useState(false);
 
     const [isPopupVisible, setPopupVisible] = useState(false);
-    const [categories, setCategories] = useState(databaseService.getAllCategories());
+    // const [categories, setCategories] = useState(databaseService.getAllCategories());
+    const [categories, setCategories] = useState(null);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     const togglePopup = () => {
         setPopupVisible(!isPopupVisible);
     };
+
+    useEffect(() => {
+      const initializeDatabase = async () => {
+          try {
+              await sqliteService.initDatabase();
+              const fetchedCategories = await sqliteService.getAllCategories();
+              setCategories(fetchedCategories);
+
+              databaseService.syncCategoriesFromSQLite();
+              databaseService.getAllRecipesFromSQLDatabase();
+
+
+              console.log('Databases initialized successfully.');
+              setIsInitialized(true); 
+          } catch (error) {
+              console.error('Error during database initialization:', error);
+          }
+      };
+
+      initializeDatabase(); 
+  }, []);
 
     useEffect(() => {
       navigation.setOptions({
@@ -36,11 +63,18 @@ export default HomeScreen = ({ navigation }) => {
     }, []);
 
     useEffect(() => {
-
       const updatedCategories = databaseService.getAllCategories();
-    setCategories(updatedCategories);
-    setShowSavedModal(true);
+      setCategories(updatedCategories);
+      setShowSavedModal(true);
     }, [dBChangedContext]);
+
+    if (!categories) {
+      return (
+          <View style={styles.loadingContainer}>
+              <FeedBack message="Loading categories..." />
+          </View>
+      );
+  }
     
     return (
         <View style={styles.container}>

@@ -6,9 +6,11 @@ import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
 import {DBChangedContext} from '../context/DBChangedContextProvider';
 import FeedBack from '../components/Feedback';
+import { getImageUri, getImageUriExportIngredients, getImageUriExportInstructions, getImageUriExportDish, resetImageUris, getImageUriExportNotice } from '../camera/Camera';
+import DatabaseService2 from '../database_elements/SQLiteService';
 
 const databaseService = new DatabaseService();
-
+const databaseService2 = new DatabaseService2();
 
 
 export default EditRecipe = ({navigation, route}) => {
@@ -42,8 +44,6 @@ export default EditRecipe = ({navigation, route}) => {
             notice: notice
     };
 
-    
-
     const [formData, setFormData] = useState(routeData!==undefined? routeData: defaultData);
 
     useEffect(() => {
@@ -55,29 +55,55 @@ export default EditRecipe = ({navigation, route}) => {
     }, [formData.category]);
 
    const handleSubmit = () => {
-    if (routeData!==undefined) {
+    if (routeData !== undefined) {
         if (recipeList) {
             databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
             newAdded();
-        }else if (fromHome){
-            databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
-        } else{
-        newName(formData.name);
-        newIngredients(formData.ingredients);
-        newInstructions(formData.instructions);
-        newNotice(formData.notice);
-        databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
-        setCategoryContext(formData.category);
+        } else if (fromHome){
+            const ingredientsUri = getImageUriExportIngredients();
+            const instructionsUri = getImageUriExportInstructions();
+            const noticeUri = getImageUriExportNotice();
+            let dishUri = getImageUriExportDish();
+
+            if (ingredientsUri !== null) {
+                formData.ingredients = ingredientsUri;
+            }
+            if (instructionsUri !== null) {
+                formData.instructions = instructionsUri;
+            }
+            if (noticeUri !== null) {
+                formData.notice = noticeUri;
+            }
+            if (dishUri === null) {
+                dishUri = '';
+            }
+            console.log("EDIT RECIPE: category: " + formData.category + " ,name: " + formData.name + " ,ingredients: "  + formData.ingredients + " ,instructions: " + formData.instructions + " ,notice: " + formData.notice + " ,dish: " + dishUri);
+            databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice, dishUri);
+        } else {
+            newName(formData.name);
+            newIngredients(formData.ingredients);
+            newInstructions(formData.instructions);
+            newNotice(formData.notice);
+            databaseService.updateRecipe(routeData.name, formData.name, formData.category, formData.ingredients, formData.instructions, formData.notice);
+            setCategoryContext(formData.category);
             }
         } else {
-        databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
+            databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice);
         }
 
+        resetImageUris();
         setDBChangedContext(!dBChangedContext);
         setFormData(defaultData);
         setValue(null);
         navigation.goBack();
     };
+
+    const something = async () => {
+        const recipes = await databaseService2.getAllRecipes();
+        console.log("EditRecipe.js something(): ");
+        console.log(databaseService2.getAllRecipes());
+        console.log(recipes);
+    }
     
     const [value, setValue] = useState(routeData!==undefined? routeData.category: categoryContext);
 
@@ -129,30 +155,58 @@ export default EditRecipe = ({navigation, route}) => {
                 />
             </View>
             <View style={styles.ingredients}>
-                <Text style={styles.text}>Ingredients</Text>
-                <TextInput style={styles.ingredientsField} multiline={true} textAlignVertical="top" placeholder="Ingredients"
-                    onChangeText={(text) => setFormData({...formData, ingredients: text})}
-                    value={formData.ingredients}
-                />
+                <View style={styles.row}>
+                    <Text style={styles.text}>Ingredients</Text>
+
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'ingredients'})} >
+                        <Text style={styles.text}>Camera</Text>
+                    </TouchableOpacity>
+                </View>
+                
+                    <TextInput style={styles.ingredientsField} multiline={true} textAlignVertical="top" placeholder="Ingredients"
+                        onChangeText={(text) => setFormData({...formData, ingredients: text})}
+                        value={formData.ingredients}
+                    />
             </View>
             <View style={styles.instructions}>
-                <Text style={styles.text}>Instructions</Text>
+                <View style={styles.row}>
+                    <Text style={styles.text}>Instructions</Text>
+
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'instructions'})} >
+                        <Text style={styles.text}>Camera</Text>
+                    </TouchableOpacity>
+                </View>
+                
                 <TextInput style={styles.instructionsField} multiline={true} textAlignVertical="top" placeholder="Instructions"
                     onChangeText={(text) => setFormData({...formData, instructions: text})}
                     value={formData.instructions}
                 />
             </View>
             <View style={styles.notice}>
-                <Text style={styles.text}>Notice</Text>
+                <View style={styles.row}>
+                    <Text style={styles.text}>Notice</Text>
+
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'notice'})} >
+                        <Text style={styles.text}>Camera</Text>
+                    </TouchableOpacity>
+                </View>
                 <TextInput style={styles.noticeField} multiline={true} textAlignVertical="top"
                     placeholder="Notice"
                     onChangeText={(text) => setFormData({...formData, notice: text})}
                     value={formData.notice}
                 />
             </View>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'dish'})} >
+                    <Text style={styles.text}>Picture of Dish</Text>
+                </TouchableOpacity>
+                
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                     <Text style={styles.text}>Save</Text>
                 </TouchableOpacity>
+
+                {/* <TouchableOpacity style={styles.button} onPress={something}>
+                    <Text style={styles.text}>getAllRecipes()</Text>
+                </TouchableOpacity> */}
         </View>
     )
 }
@@ -313,6 +367,11 @@ const styles = StyleSheet.create({
             borderRadius: 10,
             backgroundColor: 'white',
         },
+        row: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        }
       
     
 });

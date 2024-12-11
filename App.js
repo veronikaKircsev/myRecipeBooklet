@@ -11,7 +11,7 @@ import RecipeScreen from './screens/RecipeScreen';
 import {CategoryContextProvider} from './context/CategoryContextProvider';
 import CreateCategory from './screens/CreateCategory';
 import {DBChangedContextProvider} from './context/DBChangedContextProvider';
-
+import CameraScreen from './camera/Camera';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +37,7 @@ export default function App() {
       <Stack.Screen name="Edit Recipe" component={EditRecipe} />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
       <Stack.Screen name="Create Category" component={CreateCategory} />
+      <Stack.Screen name="Camera" component={CameraScreen} />
     </Stack.Navigator>
   </NavigationContainer>
   </DBChangedContextProvider>

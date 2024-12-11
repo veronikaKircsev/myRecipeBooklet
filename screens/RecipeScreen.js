@@ -4,13 +4,15 @@ import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
 import FeedBack from '../components/Feedback';
 import {DBChangedContext} from '../context/DBChangedContextProvider';
-
+import FileSystemService from '../database_elements/FileSystemService';
 
 const databaseService = new DatabaseService();
 
 export default RecipeScreen = ({navigation, route}) => {
-
     const {recipe,  handleLike} = route.params;
+
+    const test = databaseService.getRecipe(recipe.name);
+    console.log("RecipeScreen: " + JSON.stringify(test));
 
     const [recipeLike, setLike] = useState(recipe.like);
 
@@ -18,6 +20,7 @@ export default RecipeScreen = ({navigation, route}) => {
     const [ingredients, setIngredients] = useState(recipe.ingredients);
     const [instructions, setInstructions] = useState(recipe.instructions);
     const [notice, setNotice] = useState(recipe.notice);
+    const [dish, setDish] = useState(test.dish);
     const [showSavedModal, setShowSavedModal] = useState(false);
     const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
     const [showModal, setShowModal] = useState(false);
@@ -59,18 +62,65 @@ export default RecipeScreen = ({navigation, route}) => {
     return (
         <ScrollView style={styles.container}>
             <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)} />
-            <View style={styles.elements}>
+            
+            {/* <View style={styles.elements}>
                 <Text style={styles.text}>Ingredients:</Text>
                 <Text style={styles.textContainer}>{ingredients}</Text>
-            </View>
+            </View> */}
+            
             <View style={styles.elements}>
+                <Text style={styles.text}>Ingredients:</Text>
+                    {ingredients.startsWith("file://") ? (
+                        <Image style={styles.imagePreview} source={{ uri: ingredients }} />
+                            ) : (
+                        <Text style={styles.textContainer}>{ingredients}</Text>
+                        )}
+            </View>
+            
+            {/* <View style={styles.elements}>
                 <Text style={styles.text}>Instructions:</Text>
                 <Text style={styles.textContainer}>{instructions}</Text>
-            </View>
+            </View> */}
+
             <View style={styles.elements}>
+                <Text style={styles.text}>Instructions:</Text>
+                    {instructions.startsWith("file://") ? (
+                        <Image style={styles.imagePreview} source={{ uri: instructions }} />
+                            ) : (
+                        <Text style={styles.textContainer}>{instructions}</Text>
+                        )}
+            </View>
+            
+            
+            {/* <View style={styles.elements}>
             <Text style={styles.text}>Notice:</Text>
             <Text style={styles.textContainer}>{notice}</Text>
+            </View> */}
+
+            <View style={styles.elements}>
+                <Text style={styles.text}>Notice:</Text>
+                {notice ? (
+                    notice.startsWith("file://") ? (
+                        <Image style={styles.imagePreview} source={{ uri: notice }} />
+                            ) : (
+                        <Text style={styles.textContainer}>{notice}</Text>
+                        )
+                
+                ) : null}
             </View>
+
+            <View style={styles.elements}>
+                <Text style={styles.text}>Dish:</Text>
+                {dish ? (
+                    dish.startsWith("file://") ? (
+                        <Image style={styles.imagePreview} source={{ uri: dish }} />
+                            ) : (
+                        <Text style={styles.textContainer}>{dish}</Text>
+                        )
+                
+                ) : null}
+    	    </View>        
+
             <TouchableOpacity style={styles.editContainer} onPress={() => {navigation.navigate('Edit Recipe',
                 {category: recipe.category, 
                 name: recipe.name, 
@@ -143,5 +193,12 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderStyle: 'solid',
         margin:10,
-    }
+    },
+    imagePreview: {
+        width: '100%',
+        height: 300,
+        resizeMode: 'cover',
+        borderRadius: 10,
+        marginTop: 10,
+    },
 });
