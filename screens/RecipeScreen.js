@@ -12,7 +12,9 @@ export default RecipeScreen = ({navigation, route}) => {
 
     const {recipe,  handleLike} = route.params;
 
-    const [recipeLike, setLike] = useState(recipe.like);
+    console.log(recipe.isLiked);
+
+    const [recipeLike, setLike] = useState(recipe.isLiked);
 
     const [nameRecipe, setNameRecipe] = useState(recipe.name);
     const [ingredients, setIngredients] = useState(recipe.ingredients);
@@ -38,7 +40,7 @@ export default RecipeScreen = ({navigation, route}) => {
             <TouchableOpacity style={styles.likeButton} onPress={()=>{databaseService.updateLike(recipe.name),
                 handleLike(), setLike(!recipeLike)
             }}>
-                            {recipeLike ?
+                            {!recipeLike ?
                         (<Image style={styles.image} source={require('../assets/appIcons/like.png')}/>):(
                         <Image style={styles.image} source={require('../assets/appIcons/not-like.png')}/>)}
                         </TouchableOpacity>
