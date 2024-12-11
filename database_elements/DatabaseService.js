@@ -45,6 +45,7 @@ class DatabaseService {
     }
 
     updateLike(name) {
+        console.log('updateLike');
         const data = this.store.getRow(RECIPE, name);
         this.store.setRow(RECIPE, name, {
             name: data.name,
@@ -206,14 +207,14 @@ class DatabaseService {
     }
 
     createDefaultRecipe(category, name, ingredients, instructions, notice, dish, isLiked) {
-        this.store.setRow(RECIPE, category, {
+        this.store.setRow(RECIPE, name, {
             category: category,
             name: name,
             ingredients: ingredients,
             instructions: instructions,
             notice: notice,
             dish: dish,
-            isLiked: isLiked
+            isLiked: 'false'
         });
     }
     

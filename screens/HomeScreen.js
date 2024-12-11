@@ -10,6 +10,22 @@ import SQLiteService from '../database_elements/SQLiteService';
 
 const sqliteService = new SQLiteService();
 const databaseService = new DatabaseService();
+const initializeDatabase = async () => {
+  try {
+      await sqliteService.initDatabase();
+      const fetchedCategories = await sqliteService.getAllCategories();
+      setCategories(fetchedCategories);
+
+      databaseService.syncCategoriesFromSQLite();
+      databaseService.getAllRecipesFromSQLDatabase();
+
+
+      console.log('Databases initialized successfully.');
+      setIsInitialized(true); 
+  } catch (error) {
+      console.error('Error during database initialization:', error);
+  }
+};
 
 // databaseService.syncCategoriesFromSQLite();
 // databaseService.initializeDefaultCategories();
@@ -49,6 +65,7 @@ export default HomeScreen = ({ navigation }) => {
           }
       };
 
+      console.log('Initializing databases...');
       initializeDatabase(); 
   }, []);
 

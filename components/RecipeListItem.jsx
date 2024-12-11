@@ -20,7 +20,8 @@ const RecipeListItem = ({recipe, navigation}) => {
         <TouchableOpacity style={styles.button}
         onPress={() => {navigation.navigate('Recipe',{
             recipe: recipe,
-            handleLike: handleLike})}}>
+            handleLike: handleLike,
+            like: like})}}>
                     <View> 
                     <Text style={styles.text}>{recipe.name}</Text>
                     <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
