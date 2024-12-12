@@ -29,8 +29,8 @@ class SQLiteService {
           id INTEGER PRIMARY KEY NOT NULL,
           category TEXT NOT NULL,
           name TEXT NOT NULL,
-          ingredients TEXT NOT NULL,
-          instructions TEXT NOT NULL,
+          ingredients TEXT,
+          instructions TEXT,
           notice TEXT,
           dish TEXT,
           isLiked TEXT

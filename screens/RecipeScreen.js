@@ -45,7 +45,7 @@ export default RecipeScreen = ({navigation, route}) => {
             <TouchableOpacity style={styles.likeButton} onPress={()=>{databaseService.updateLike(recipe.name),
                 handleLike(), setLike(!recipeLike)
             }}>
-                            {!recipeLike ?
+                            {recipeLike ?
                         (<Image style={styles.image} source={require('../assets/appIcons/like.png')}/>):(
                         <Image style={styles.image} source={require('../assets/appIcons/not-like.png')}/>)}
                         </TouchableOpacity>
@@ -114,7 +114,7 @@ export default RecipeScreen = ({navigation, route}) => {
             </View>
 
             <View style={styles.elements}>
-                <Text style={styles.text}>Dish:</Text>
+                <Text style={styles.text}>Photo:</Text>
                 {dish ? (
                     dish.startsWith("file://") ? (
                         <Image style={styles.imagePreview} source={{ uri: dish }} />
@@ -131,10 +131,12 @@ export default RecipeScreen = ({navigation, route}) => {
                 ingredients: recipe.ingredients, 
                 instructions: recipe.instructions, 
                 notice: recipe.notice,
+                dish: dish,
                 newName: setNewNameRecipe,
                 newIngredients: setIngredients,
                 newInstructions: setInstructions,
-                newNotice: setNotice
+                newNotice: setNotice,
+                newDish: setDish,
             }
             )}}>
                 <Image style={styles.edit} source={require('../assets/appIcons/modify.png')}/>

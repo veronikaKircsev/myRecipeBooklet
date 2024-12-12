@@ -1,8 +1,9 @@
 import { CameraView, CameraType, useCameraPermissions, Camera } from 'expo-camera';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Image, Modal, ScrollView } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 // import * as MediaLibrary from 'expo-media-library';
+import { CameraContext } from '../context/CameraContextProvider';
 
 let imageUriExport = null;
 let imageUriExportIngredients = null;
@@ -15,7 +16,9 @@ const INSTRUCTIONS = 'instructions';
 const NOTICE = 'notice';
 const DISH = 'dish';
 
-export default function CameraScreen({route}) {
+export default function CameraScreen({navigation, route}) {
+
+    const { cameraContext, setCameraContext } = useContext(CameraContext);
 
     const {source} = route.params;
 
@@ -43,7 +46,6 @@ export default function CameraScreen({route}) {
             cameraRef.current?.takePictureAsync({ skipProcessing: true, })
             .then((photoData) => {
                 if (photoData.uri) {
-                    console.log("Foto erfolgreich aufgenommen! URI:", photoData.uri);
                     setImageUri(photoData.uri); 
                     setConfirmPhoto(true);
                   } else {
@@ -78,7 +80,6 @@ export default function CameraScreen({route}) {
       try {
         const fileExists = await FileSystem.getInfoAsync(fileUri);
         if(fileExists.exists) {
-          console.log("Photo found: ", fileUri);
           return fileUri;
         } else {
           console.error("Photo not found");
@@ -95,14 +96,12 @@ export default function CameraScreen({route}) {
   
       try {
           const content = await FileSystem.readAsStringAsync(fileUri);
-          console.log('File content:', content);
       } catch (error) {
           console.error('Error while reading file:', error);
       }
     }
 
     const usePhoto = async () => {
-      console.log("Foto wird verwendet: ", imageUri);
       setConfirmPhoto(false);
 
       console.log("route: " + source);
@@ -116,6 +115,10 @@ export default function CameraScreen({route}) {
       } else if(source === DISH) {
         imageUriExportDish = imageUri;
       }
+
+      setCameraContext(!cameraContext);
+
+      navigation.goBack();
 
     };
 
