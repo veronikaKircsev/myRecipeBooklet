@@ -52,7 +52,6 @@ export default function CameraScreen({navigation, route}) {
                     console.error("Fotoaufnahme fehlgeschlagen!");
                   }
                 setImageUri(photoData.uri);
-                console.log("photoData.uri: " + photoData.uri);
             });
         }
     };
@@ -103,8 +102,6 @@ export default function CameraScreen({navigation, route}) {
 
     const usePhoto = async () => {
       setConfirmPhoto(false);
-
-      console.log("route: " + source);
 
       if(source === INGREDIENTS) {
         imageUriExportIngredients = imageUri;

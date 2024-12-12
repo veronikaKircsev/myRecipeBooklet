@@ -45,14 +45,20 @@ class DatabaseService {
     }
 
     updateLike(name) {
+        console.log('updateLike');
         const data = this.store.getRow(RECIPE, name);
+        if (data.isLiked === undefined) {
+            data.isLiked = 'false';
+        }
+        console.log(data);
         this.store.setRow(RECIPE, name, {
             name: data.name,
             category: data.category,
             ingredients: data.ingredients,
             instructions: data.instructions,
             notice: data.notice,
-            isLiked: data.isLiked === 'true' ? 'false' : 'true'
+            dish: data.dish,
+            isLiked: data.isLiked === 'false' ? 'true' : 'false'
         });
     }
 
@@ -85,6 +91,7 @@ class DatabaseService {
                 data.ingredients,
                 data.instructions,
                 data.notice,
+                data.dish,
                 data.isLiked
             )
         );
@@ -181,17 +188,17 @@ class DatabaseService {
             const sqliteRecipes = await sqliteService.getAllRecipes();
     
             sqliteRecipes.forEach(recipe => {
-                this.createDefaultRecipe(recipe.category, recipe.name, recipe.ingredients, recipe.instructions, recipe.notice, recipe.isLiked);
+                this.createDefaultRecipe(recipe.category, recipe.name, recipe.ingredients, recipe.instructions, recipe.notice, recipe.isLiked, recipe.dish);
                 this.store.setRow(RECIPE, recipe.name, {
                     category: recipe.category,
                     name: recipe.name,
                     ingredients: recipe.ingredients,
                     instructions: recipe.instructions,
                     notice: recipe.notice,
+                    dish: recipe.dish,
                     isLiked: recipe.isLiked
                 });
             });
-            console.log('Recipes synchronized from SQLite to TinyBase.');
         } catch (error) {
             console.error('Error synchronizing recipes:', error);
         }
@@ -204,14 +211,14 @@ class DatabaseService {
     }
 
     createDefaultRecipe(category, name, ingredients, instructions, notice, dish, isLiked) {
-        this.store.setRow(RECIPE, category, {
+        this.store.setRow(RECIPE, name, {
             category: category,
             name: name,
             ingredients: ingredients,
             instructions: instructions,
             notice: notice,
             dish: dish,
-            isLiked: isLiked
+            isLiked: 'false'
         });
     }
     
@@ -226,7 +233,6 @@ class DatabaseService {
                     url: category.url
                 });
             });
-            console.log('Categories synchronized from SQLite to TinyBase.');
         } catch (error) {
             console.error('Error synchronizing categories:', error);
         }

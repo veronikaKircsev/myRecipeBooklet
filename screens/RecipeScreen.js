@@ -9,16 +9,11 @@ import FileSystemService from '../database_elements/FileSystemService';
 const databaseService = new DatabaseService();
 
 export default RecipeScreen = ({navigation, route}) => {
-    const {recipe,  handleLike} = route.params;
+    const {recipe,  handleLike, like} = route.params;
 
     const test = databaseService.getRecipe(recipe.name);
-    console.log("RecipeScreen: " + JSON.stringify(test));
 
-    console.log("RecipeScreen: " + JSON.stringify(test));
-
-    console.log(recipe.isLiked);
-
-    const [recipeLike, setLike] = useState(recipe.isLiked);
+    const [recipeLike, setLike] = useState(like);
 
     const [nameRecipe, setNameRecipe] = useState(recipe.name);
     const [ingredients, setIngredients] = useState(recipe.ingredients);

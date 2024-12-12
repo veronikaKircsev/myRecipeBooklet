@@ -85,7 +85,6 @@ class SQLiteService {
         dish,
         isLiked ? 'true' : 'false'
       );
-      console.log("SQLiteService.js createRecipe(): " + result.lastInsertRowId);
     } catch (error) {
       console.error('Error inserting recipe data:', error);
     }
@@ -137,8 +136,7 @@ class SQLiteService {
 
   async getAllRecipes() {
     try {
-      const allRows = await this.db.getAllAsync('SELECT * FROM recipe');
-      console.log('Rows from DB:', allRows); 
+      const allRows = await this.db.getAllAsync('SELECT * FROM recipe'); 
       const allRecipes = allRows.map(data =>
         new Recipe(
             data.name,
@@ -151,7 +149,6 @@ class SQLiteService {
     );
 
     return allRecipes;
-      return allRows; 
     } catch (error) {
       console.error('Error fetching all test rows:', error);
     }
@@ -160,7 +157,6 @@ class SQLiteService {
   async getAllCategories() {
     try {
         const rowData = await this.db.getAllAsync('SELECT * FROM category');
-        console.log("rowData: " + JSON.stringify(rowData));
 
         if (!rowData || rowData.length === 0 || rowData === null) {
             console.warn('No categories found in the database.');

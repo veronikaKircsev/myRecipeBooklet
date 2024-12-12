@@ -33,6 +33,8 @@ const styles = StyleSheet.create({
       margin: 15,
       width: 120,
       padding: 15,
+      width: 140,
+      height  : 140,
     },
     image: {
       width: 100,

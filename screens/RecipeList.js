@@ -22,16 +22,28 @@ export default RecipeList = ({navigation, route}) => {
     const [searchText, setSearchText] = useState('');
     
     let recipes = databaseService.getAllRecipes();
+    let sortedRecipe = [...recipes].sort((a, b) => { 
+      const aLiked = a.isLiked === 'true';
+      const bLiked = b.isLiked === 'true';
+      
+      if (aLiked && !bLiked) return -1;
+      if (!aLiked && bLiked) return 1;
+      return a.name.localeCompare(b.name);
+    });
 
     useEffect(() => {
       recipes = databaseService.getAllRecipes();
-    }, [dBChangedContext]);
-    
-    const sortedRecipe = [...recipes].sort((a, b) => { 
-        if (a.isLiked==='true' && b.isLiked==='false') return -1;
-        if (a.isLiked==="false" && b.isLiked ==='true') return 1;
+      sortedRecipe = [...recipes].sort((a, b) => { 
+        const aLiked = a.isLiked === 'true';
+        const bLiked = b.isLiked === 'true';
+        
+        if (aLiked && !bLiked) return -1;
+        if (!aLiked && bLiked) return 1;
         return a.name.localeCompare(b.name);
     });
+
+    }, [dBChangedContext]);
+    
 
     useEffect(() => {
       navigation.setOptions({
