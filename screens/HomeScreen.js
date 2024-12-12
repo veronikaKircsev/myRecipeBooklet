@@ -11,10 +11,6 @@ import SQLiteService from '../database_elements/SQLiteService';
 const sqliteService = new SQLiteService();
 const databaseService = new DatabaseService();
 
-// databaseService.syncCategoriesFromSQLite();
-// databaseService.initializeDefaultCategories();
-// databaseService.generateTestRecipes();
-
 let key = 0;
 
 export default HomeScreen = ({ navigation }) => {
@@ -23,7 +19,6 @@ export default HomeScreen = ({ navigation }) => {
   const [showSavedModal, setShowSavedModal] = useState(false);
 
     const [isPopupVisible, setPopupVisible] = useState(false);
-    // const [categories, setCategories] = useState(databaseService.getAllCategories());
     const [categories, setCategories] = useState(null);
     const [isInitialized, setIsInitialized] = useState(false);
 
@@ -40,9 +35,6 @@ export default HomeScreen = ({ navigation }) => {
 
               databaseService.syncCategoriesFromSQLite();
               databaseService.getAllRecipesFromSQLDatabase();
-
-
-              console.log('Databases initialized successfully.');
               setIsInitialized(true); 
           } catch (error) {
               console.error('Error during database initialization:', error);

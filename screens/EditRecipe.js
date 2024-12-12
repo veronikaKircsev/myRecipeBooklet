@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
-import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image} from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import {CategoryContext} from "../context/CategoryContextProvider";
 import { colors } from '../Color';
@@ -77,7 +77,6 @@ export default EditRecipe = ({navigation, route}) => {
             if (dishUri === null) {
                 dishUri = '';
             }
-            console.log("EDIT RECIPE: category: " + formData.category + " ,name: " + formData.name + " ,ingredients: "  + formData.ingredients + " ,instructions: " + formData.instructions + " ,notice: " + formData.notice + " ,dish: " + dishUri);
             databaseService.createRecipe(formData.category, formData.name, formData.ingredients, formData.instructions, formData.notice, dishUri);
         } else {
             newName(formData.name);
@@ -100,8 +99,6 @@ export default EditRecipe = ({navigation, route}) => {
 
     const something = async () => {
         const recipes = await databaseService2.getAllRecipes();
-        console.log("EditRecipe.js something(): ");
-        console.log(databaseService2.getAllRecipes());
         console.log(recipes);
     }
     
@@ -122,7 +119,6 @@ export default EditRecipe = ({navigation, route}) => {
         }
     }, [dBChangedContext]);
 
-    console.log(formData.category);
     return (
         <View style={styles.containerView}> 
         <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)}/>
@@ -159,7 +155,7 @@ export default EditRecipe = ({navigation, route}) => {
                     <Text style={styles.text}>Ingredients</Text>
 
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'ingredients'})} >
-                        <Text style={styles.text}>Camera</Text>
+                    <Image source={require('../assets/appIcons/camera.png')} style={styles.camera} />
                     </TouchableOpacity>
                 </View>
                 
@@ -173,7 +169,7 @@ export default EditRecipe = ({navigation, route}) => {
                     <Text style={styles.text}>Instructions</Text>
 
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'instructions'})} >
-                        <Text style={styles.text}>Camera</Text>
+                        <Image source={require('../assets/appIcons/camera.png')} style={styles.camera} />
                     </TouchableOpacity>
                 </View>
                 
@@ -187,7 +183,7 @@ export default EditRecipe = ({navigation, route}) => {
                     <Text style={styles.text}>Notice</Text>
 
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'notice'})} >
-                        <Text style={styles.text}>Camera</Text>
+                    <Image source={require('../assets/appIcons/camera.png')} style={styles.camera} />
                     </TouchableOpacity>
                 </View>
                 <TextInput style={styles.noticeField} multiline={true} textAlignVertical="top"
@@ -197,7 +193,7 @@ export default EditRecipe = ({navigation, route}) => {
                 />
             </View>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'dish'})} >
-                    <Text style={styles.text}>Picture of Dish</Text>
+                <Image source={require('../assets/appIcons/camera.png')} style={styles.camera} />
                 </TouchableOpacity>
                 
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
@@ -371,7 +367,11 @@ const styles = StyleSheet.create({
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-        }
+        },
+        camera: {
+            width: 30,
+            height: 30,
+        },
       
     
 });
