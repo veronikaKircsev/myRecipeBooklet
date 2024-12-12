@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
-import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image} from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import {CategoryContext} from "../context/CategoryContextProvider";
 import { colors } from '../Color';
@@ -158,8 +158,8 @@ export default EditRecipe = ({navigation, route}) => {
                 <View style={styles.row}>
                     <Text style={styles.text}>Ingredients</Text>
 
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'ingredients'})} >
-                        <Text style={styles.text}>Camera</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Camera', {source: 'ingredients'})} >
+                    <Image style={styles.camera} source={require('../assets/appIcons/camera.png')}/>
                     </TouchableOpacity>
                 </View>
                 
@@ -172,8 +172,8 @@ export default EditRecipe = ({navigation, route}) => {
                 <View style={styles.row}>
                     <Text style={styles.text}>Instructions</Text>
 
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'instructions'})} >
-                        <Text style={styles.text}>Camera</Text>
+                    <TouchableOpacity  onPress={() => navigation.navigate('Camera', {source: 'instructions'})} >
+                    <Image style={styles.camera} source={require('../assets/appIcons/camera.png')}/>
                     </TouchableOpacity>
                 </View>
                 
@@ -186,8 +186,8 @@ export default EditRecipe = ({navigation, route}) => {
                 <View style={styles.row}>
                     <Text style={styles.text}>Notice</Text>
 
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'notice'})} >
-                        <Text style={styles.text}>Camera</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Camera', {source: 'notice'})} >
+                    <Image style={styles.camera} source={require('../assets/appIcons/camera.png')}/>
                     </TouchableOpacity>
                 </View>
                 <TextInput style={styles.noticeField} multiline={true} textAlignVertical="top"
@@ -197,16 +197,12 @@ export default EditRecipe = ({navigation, route}) => {
                 />
             </View>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Camera', {source: 'dish'})} >
-                    <Text style={styles.text}>Picture of Dish</Text>
+                <Image style={styles.camera} source={require('../assets/appIcons/camera.png')}/>
                 </TouchableOpacity>
                 
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                     <Text style={styles.text}>Save</Text>
                 </TouchableOpacity>
-
-                {/* <TouchableOpacity style={styles.button} onPress={something}>
-                    <Text style={styles.text}>getAllRecipes()</Text>
-                </TouchableOpacity> */}
         </View>
     )
 }
@@ -253,13 +249,13 @@ const styles = StyleSheet.create({
     },
     inputNameField: {
         width: '70%',
-        height: '90%',	
         borderColor: colors.text,
         borderStyle: 'solid',
         borderWidth: 2,
         paddingHorizontal: 10,
         borderRadius: 10,
         backgroundColor: 'white',
+        padding: 10,
     },
     ingredients: {
         flex: 3,
@@ -271,14 +267,13 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     ingredientsField: {
-        height: '75%',	
+        height: '60%',	
         borderColor: colors.text,
         borderStyle: 'solid',
         borderWidth: 2,
         paddingHorizontal: 10,
         borderRadius: 10,
         backgroundColor: 'white',
-        marginTop: 10,
         marginBottom: 10,
     },
     instructions: {
@@ -291,14 +286,13 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     instructionsField: {
-        height: '80%',	
+        height: '60%',	
         borderColor: colors.text,
         borderStyle: 'solid',
         borderWidth: 2,
         paddingHorizontal: 10,
         borderRadius: 10,
-        backgroundColor: 'white',
-        marginTop: 10,
+        backgroundColor: 'white'
     },
     notice: {
         flex: 2,
@@ -310,11 +304,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     noticeField: {
-        height: '60%',	
+        height: '45%',	
         borderColor: colors.text,
         borderStyle: 'solid',
         borderWidth: 2,
-        marginTop: 10,
         paddingHorizontal: 10,
         borderRadius: 10,
         backgroundColor: 'white',
@@ -371,6 +364,11 @@ const styles = StyleSheet.create({
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
+        },
+        camera: {
+            width: 30,
+            height: 30,
+            margin: 10
         }
       
     
