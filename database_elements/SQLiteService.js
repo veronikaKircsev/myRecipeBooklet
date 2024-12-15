@@ -79,16 +79,30 @@ class SQLiteService {
 
   async createRecipe(category, name, ingredients, instructions, notice, dish, isLiked = false) {
     try {
-      const result = await this.db.runAsync(
-        'INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        category,
-        name,
-        ingredients,
-        instructions,
-        notice, 
-        dish,
-        isLiked ? 'true' : 'false'
-      );
+      const query = `
+      INSERT INTO recipe (category, name, ingredients, instructions, notice, dish, isLiked)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(name) DO UPDATE SET
+        category = excluded.category,
+        ingredients = excluded.ingredients,
+        instructions = excluded.instructions,
+        notice = excluded.notice,
+        dish = excluded.dish,
+        isLiked = excluded.isLiked
+    `;
+    await this.db.runAsync(
+      query,
+      category,
+      name,
+      ingredients,
+      instructions,
+      notice,
+      dish,
+      isLiked ? 'true' : 'false'
+    );
+
+    console.log('Recipe created or updated successfully');
+
     } catch (error) {
       console.error('Error inserting recipe data:', error);
     }
