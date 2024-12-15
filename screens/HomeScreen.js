@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, ScrollView, FlatList } from 'react-native';
 import {CategoryItem} from '../components/CategoryItem';
 import Popup from '../components/PopUp';
 import { colors } from '../Color';
@@ -12,6 +12,7 @@ const sqliteService = new SQLiteService();
 const databaseService = new DatabaseService();
 
 let key = 0;
+let numColumns=2;
 
 export default HomeScreen = ({ navigation }) => {
 
@@ -71,13 +72,13 @@ export default HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
           <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)} />
-          <ScrollView>
             <View style={styles.containerView}> 
-            {categories.map((category) =>
-                <CategoryItem key={key++} url={category.url} name={category.name} navigation={navigation}/>
-                )}
+              <FlatList data={categories} numColumns={numColumns}
+              renderItem={({ item }) => (
+                <CategoryItem url={item.url} name={item.name} navigation={navigation} />
+              )}
+              keyExtractor={(item) => key++}/>
             </View>
-            </ScrollView>
             <View style={styles.button}>
               <TouchableOpacity onPress={() => togglePopup()}>
                 <Image source={require('../assets/appIcons/plus.png')} style={styles.image} />
@@ -105,6 +106,7 @@ export default HomeScreen = ({ navigation }) => {
           marginTop: 20,
           paddingHorizontal: 5,
           paddingVertical: 5,
+          height: '100%',
         },
         text: {
           fontSize: 20,

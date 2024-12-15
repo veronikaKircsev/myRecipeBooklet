@@ -34,12 +34,18 @@ export default RecipeScreen = ({navigation, route}) => {
         setNameRecipe(newName);
     }
 
+    const handleLikePress = () => {
+        databaseService.updateLike(recipe.name);
+        handleLike; 
+        setLike(!recipeLike);
+        setDBChangedContext(!dBChangedContext);
+    };
+    console.log('like', recipeLike);
+
     useEffect(() => {
       navigation.setOptions({
         headerRight: () => (
-            <TouchableOpacity style={styles.likeButton} onPress={()=>{databaseService.updateLike(recipe.name),
-                handleLike(), setLike(!recipeLike)
-            }}>
+            <TouchableOpacity style={styles.likeButton} onPress={()=>{ handleLikePress(); }}>
                             {recipeLike ?
                         (<Image style={styles.image} source={require('../assets/appIcons/like.png')}/>):(
                         <Image style={styles.image} source={require('../assets/appIcons/not-like.png')}/>)}
@@ -61,12 +67,6 @@ export default RecipeScreen = ({navigation, route}) => {
     return (
         <ScrollView style={styles.container}>
             <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)} />
-            
-            {/* <View style={styles.elements}>
-                <Text style={styles.text}>Ingredients:</Text>
-                <Text style={styles.textContainer}>{ingredients}</Text>
-            </View> */}
-            
             <View style={styles.elements}>
                 <Text style={styles.text}>Ingredients:</Text>
                     {ingredients.startsWith("file://") ? (
@@ -75,12 +75,6 @@ export default RecipeScreen = ({navigation, route}) => {
                         <Text style={styles.textContainer}>{ingredients}</Text>
                         )}
             </View>
-            
-            {/* <View style={styles.elements}>
-                <Text style={styles.text}>Instructions:</Text>
-                <Text style={styles.textContainer}>{instructions}</Text>
-            </View> */}
-
             <View style={styles.elements}>
                 <Text style={styles.text}>Instructions:</Text>
                     {instructions.startsWith("file://") ? (
@@ -89,13 +83,6 @@ export default RecipeScreen = ({navigation, route}) => {
                         <Text style={styles.textContainer}>{instructions}</Text>
                         )}
             </View>
-            
-            
-            {/* <View style={styles.elements}>
-            <Text style={styles.text}>Notice:</Text>
-            <Text style={styles.textContainer}>{notice}</Text>
-            </View> */}
-
             <View style={styles.elements}>
                 <Text style={styles.text}>Notice:</Text>
                 {notice ? (

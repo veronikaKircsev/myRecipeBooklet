@@ -8,8 +8,12 @@ const CATEGORY = 'category';
 
 class SQLiteService {
   constructor() {
+      if (SQLiteService.instance) {
+        return SQLiteService.instance;
+      }
     this.db = null;
     this.initDatabase();
+    SQLiteService.instance = this;
   }
 
   async initDatabase() {

@@ -18,8 +18,8 @@ const CategoryIcon= ({icon, onPress, setId}) => {
 
 const styles = StyleSheet.create({
     button: {
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',

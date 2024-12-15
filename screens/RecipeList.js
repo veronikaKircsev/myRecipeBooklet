@@ -1,11 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {StyleSheet, ScrollView, View, TouchableOpacity, Image, TextInput} from 'react-native'
+import {StyleSheet, View, TouchableOpacity, Image, TextInput, FlatList} from 'react-native'
 import DatabaseService from '../database_elements/DatabaseService';
 import RecipeListItem from '../components/RecipeListItem';
 import {CategoryContext} from "../context/CategoryContextProvider";
 import { colors } from '../Color';
 import FeedBack from '../components/Feedback';
 import {DBChangedContext} from '../context/DBChangedContextProvider';
+import { LikeContext } from '../context/LikeContextProvider';
 
 const databaseService = new DatabaseService();
 let key = 0;
@@ -18,6 +19,7 @@ export default RecipeList = ({navigation, route}) => {
     const [search, setSearch] = useState(route.params !== undefined ? homeScreen : false);
     const [showSavedModal, setShowSavedModal] = useState(false);
     const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
+    const {likeContext, setLikeContext} = useContext(LikeContext);
 
     const [searchText, setSearchText] = useState('');
     
@@ -29,7 +31,18 @@ export default RecipeList = ({navigation, route}) => {
       if (aLiked && !bLiked) return -1;
       if (!aLiked && bLiked) return 1;
       return a.name.localeCompare(b.name);
-    });
+    }).filter((recipe) => {
+      if (!homeScreen) {
+        return recipe.category === categoryContext;
+      } else {
+        return true;
+      }}
+      ).filter((recipe) => {
+        if (searchText !== '') {
+          return recipe.name.toLowerCase().includes(searchText.toLowerCase());
+        }
+        return true;
+      });
 
     useEffect(() => {
       recipes = databaseService.getAllRecipes();
@@ -40,9 +53,20 @@ export default RecipeList = ({navigation, route}) => {
         if (aLiked && !bLiked) return -1;
         if (!aLiked && bLiked) return 1;
         return a.name.localeCompare(b.name);
-    });
+    }).filter((recipe) => {
+      if (!homeScreen) {
+        return recipe.category === categoryContext;
+      } else {
+        return true;
+      }}
+      ).filter((recipe) => {
+        if (searchText !== '') {
+          return recipe.name.toLowerCase().includes(searchText.toLowerCase());
+        }
+        return true;
+      });
 
-    }, [dBChangedContext]);
+    }, [dBChangedContext, likeContext]);
     
 
     useEffect(() => {
@@ -94,7 +118,7 @@ export default RecipeList = ({navigation, route}) => {
 
 
     return (
-        <ScrollView style={styles.containerView}> 
+        <View style={styles.containerView}> 
         <FeedBack visible={showSavedModal} onClose={()=> setShowSavedModal(false)}/>
         {search && (
           <View style={styles.searchContainer}>
@@ -103,25 +127,15 @@ export default RecipeList = ({navigation, route}) => {
               <Image style={styles.exit} source={require('../assets/appIcons/x.png')} />
             </TouchableOpacity>
               </View>)}
-            {sortedRecipe.filter((recipe) => {
-            if (!homeScreen) {
-              return recipe.category === categoryContext;
-            } else {
-              return true;
-            }}
-            ).filter((recipe) => {
-              if (searchText !== '') {
-                return recipe.name.toLowerCase().includes(searchText.toLowerCase());
-              }
-              return true;
-            }).map((recipe) => 
-                <RecipeListItem key={key++} recipe={recipe} navigation={navigation}/>)}
+                  <FlatList data={sortedRecipe}
+                      renderItem={({ item }) => (<RecipeListItem recipe={item} navigation={navigation} />)}
+                  keyExtractor={(item) => key++}/>
             <View style={styles.button}>
               <TouchableOpacity onPress={handlePress}>
                 <Image source={require('../assets/appIcons/plus.png')} style={styles.image} />
               </TouchableOpacity>
             </View>
-        </ScrollView>
+        </View>
     )
 }
 

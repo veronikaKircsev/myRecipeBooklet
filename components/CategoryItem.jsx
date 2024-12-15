@@ -2,9 +2,14 @@ import React, {useContext} from "react";
 import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 import { colors } from "../Color";
 import {CategoryContext} from "../context/CategoryContextProvider";
+import DatabaseService from "../database_elements/DatabaseService";
+
+const databaseService = new DatabaseService();
 
 
 export const CategoryItem = ({url, name, navigation}) => {
+
+  const ImageList = databaseService.getCategoryIcons();
 
   const { categoryContext, setCategoryContext } = useContext(CategoryContext);
   
@@ -49,6 +54,7 @@ const styles = StyleSheet.create({
     },
   });
 
+  /*
   export const ImageList = [
     { id: '1', 'url': require('../assets/categoryIcons/soup.png') },
     { id: '2', 'url': require('../assets/categoryIcons/mainCourse.png') },
@@ -96,3 +102,4 @@ const styles = StyleSheet.create({
     { id: '46', 'url': require('../assets/categoryIcons/43.png') },
   
 ];
+  */

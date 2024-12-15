@@ -1,8 +1,7 @@
 import React, {useState, useContext} from 'react'
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView} from 'react-native'
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, FlatList} from 'react-native'
 import { colors } from '../Color';
 import DatabaseService from '../database_elements/DatabaseService';
-import {ImageList} from '../components/CategoryItem';
 import CategoryIcon from '../components/CategoryIcon';
 import {DBChangedContext} from '../context/DBChangedContextProvider';
 import {CategoryContext} from "../context/CategoryContextProvider";
@@ -10,6 +9,7 @@ import {CategoryContext} from "../context/CategoryContextProvider";
 const databaseService = new DatabaseService();
 
 let key = 0;
+let numColumns = 4;
 
 export default CreateCategory = ({navigation, route}) => {
 
@@ -17,6 +17,8 @@ export default CreateCategory = ({navigation, route}) => {
     const { categoryContext, setCategoryContext } = useContext(CategoryContext);
 
     const {createPage} = route.params!==undefined? route.params: false;
+
+    const ImageList = databaseService.getCategoryIcons();
 
     const defaultData = {
         name: '',
@@ -49,12 +51,13 @@ export default CreateCategory = ({navigation, route}) => {
                 value={formData.name}
             />
             </View>
-            <ScrollView style={styles.iconContainer}>
+            <View style={styles.iconContainer}>
                 <Text style={styles.text}>Choose Icon</Text>
-                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                {ImageList.map((icon) => <CategoryIcon key={key++} icon={icon} onPress={setIcon} setId={formData.iconId}/>)}
+                <View style={{flexDirection: 'row', height: '80%'}}>
+                <FlatList data={ImageList} renderItem={({item}) => <CategoryIcon icon={item} onPress={setIcon} setId={formData.iconId}/>} numColumns={numColumns}
+                keyExtractor={(item) => key++} />
                 </View>
-            </ScrollView>
+            </View>
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.text}>Create</Text>
             </TouchableOpacity>
@@ -82,7 +85,8 @@ export default CreateCategory = ({navigation, route}) => {
             marginBottom: 10,
             borderRadius: 5,
             backgroundColor: 'white',
-            fontSize: 18
+            fontSize: 18,
+            height: 40,
         },
         containerView: {
             flex: 1,
@@ -100,5 +104,6 @@ export default CreateCategory = ({navigation, route}) => {
         iconContainer: {
             backgroundColor: colors.background,
             borderRadius: 20,
+            height: '70%',
         }
     })

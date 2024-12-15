@@ -2,18 +2,17 @@ import React, {useState, useContext} from "react";
 import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 import { colors } from "../Color";
 import DatabaseService from "../database_elements/DatabaseService";
-import {DBChangedContext} from '../context/DBChangedContextProvider';
+import {LikeContext} from '../context/LikeContextProvider';
 
 const database = new DatabaseService();
 const RecipeListItem = ({recipe, navigation}) => {
+    const {likeContext, setLikeContext} = useContext(LikeContext);
+    const [like, setLike] = useState(recipe.isLiked==='true'? true : false);
 
-    const [like, setLike] = useState(recipe.isLiked==='true'? true:false);
-    const {dBChangedContext, setDBChangedContext} = useContext(DBChangedContext);
-
-    function handleLike() {
+     const handleLike = () => {
         setLike(!like);
         database.updateLike(recipe.name);
-        setDBChangedContext(!dBChangedContext);
+        setLikeContext(!likeContext);
     };
       
      return (
